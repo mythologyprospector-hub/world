@@ -1,3 +1,5 @@
+![World social preview](world.jpeg)
+
 # Mythology Prospector World
 
 > The durable landing point for the mythologyprospector-hub project world.
