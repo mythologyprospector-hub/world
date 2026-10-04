@@ -11,7 +11,6 @@ This is a public world-level repository. Public orientation documents must not l
 | **organs** | Runtime/infrastructure substrate providing explicit service, communication, discovery, coordination, approval, introspection, and telemetry mechanisms. |
 | **praxis** | Human-centered solution-discovery engine: defined problems → candidate interventions → bounded tests → human decision → evidence. |
 | **tiger-den** | Map of reusable computational primitives already built in the world's software. |
-| **ai-foundry** | Local-first AI engineering laboratory for models, configurations, experiments, evaluation, and reproducibility. |
 | **esoteric-atlas** | Research atlas and computational workbench for studying esoteric traditions with provenance and context. |
 
 ## Relationship rule
