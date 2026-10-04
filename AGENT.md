@@ -6,6 +6,11 @@ This file governs agent behavior at the world level. Individual project reposito
 ## Cross-repository lookup
 Treat the GitHub world as one connected unit of orientation. When the answer is not present in the current repository, look in the relevant repositories before guessing.
 
+## Private and retired projects
+Authorized tooling may see private repositories. Privacy is therefore not an agent authorization boundary by itself. Private project contents must not be surfaced in public world documentation without authorization.
+
+A project explicitly retired by James is historical archaeology only. It is not current architecture or authority. Do not extend, integrate, or revive it unless James explicitly does so. **Akasha is retired historical archaeology.**
+
 ## One automatic retry
 For a recoverable tool or repository operation failure, retry the same operation **once** automatically.
 
@@ -17,6 +22,7 @@ For a recoverable tool or repository operation failure, retry the same operation
 
 ## Public world map
 This repository is a public world-level orientation layer. Do not name private repositories in public orientation documents merely to help agents navigate. Private projects remain available through authorized project work when explicitly needed.
+
 ## World-level gap question
 After checking the current repository and then the relevant repositories across the whole world, if no justified next task can be found, stop inventing work and ask:
 
