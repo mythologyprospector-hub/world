@@ -17,3 +17,9 @@ For a recoverable tool or repository operation failure, retry the same operation
 
 ## Public world map
 This repository is a public world-level orientation layer. Do not name private repositories in public orientation documents merely to help agents navigate. Private projects remain available through authorized project work when explicitly needed.
+## World-level gap question
+After checking the current repository and then the relevant repositories across the whole world, if no justified next task can be found, stop inventing work and ask:
+
+**What is this world missing now that this much exists?**
+
+The purpose of the world is to help mankind prosper, flourish, and advance without dystopian, Orwellian, coercive, or dehumanizing systems. This is a guiding objective, not permission to override project canons, evidence, safety boundaries, or human judgment.
