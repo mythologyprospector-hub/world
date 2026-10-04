@@ -53,11 +53,19 @@ Keep durable documentation synchronized with meaningful work.
 
 Prefer the smallest correct, testable step.
 
-## Human communication
+## Human communication — KEEP IT BRIEF
 
-Keep reports short.
+The human does not code and does not need implementation narration.
 
-The human wants enough information to remain in control, not a transcript of implementation details.
+- Use plain, everyday language.
+- Keep updates and explanations short.
+- Lead with the result, decision, or one thing the human needs to know.
+- Avoid jargon, long technical summaries, and token-heavy recaps.
+- Explain technical details only when asked or when a decision genuinely depends on them.
+- Do the work quietly; report what changed, whether it was checked, and any needed human action.
+- A lone `.` is authorization to continue. Do not spend a reply explaining that you are continuing.
+
+Brevity must not hide a risk, failure, uncertainty, or approval boundary.
 
 ## Arrival command
 
