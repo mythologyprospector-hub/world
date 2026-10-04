@@ -2,6 +2,8 @@
 
 This is a world-level orientation map, not a replacement for individual project READMEs.
 
+This is a public world-level repository. Public orientation documents must not list private repositories merely for navigation. Private projects remain discoverable through authorized project work when explicitly needed.
+
 | Repository | Current orientation |
 |---|---|
 | **renaissance** | Human-centered technological foundation; capability model and broader architectural constellation. |
