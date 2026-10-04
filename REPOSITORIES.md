@@ -13,7 +13,6 @@ This is a public world-level repository. Public orientation documents must not l
 | **tiger-den** | Map of reusable computational primitives already built in the world's software. |
 | **ai-foundry** | Local-first AI engineering laboratory for models, configurations, experiments, evaluation, and reproducibility. |
 | **esoteric-atlas** | Research atlas and computational workbench for studying esoteric traditions with provenance and context. |
-| **notation-transposer** | Notation-first toolkit for musical transformation using a canonical musical representation. |
 
 ## Relationship rule
 
