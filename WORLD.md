@@ -14,6 +14,14 @@ They may cooperate through explicit contracts where useful, while retaining sepa
 
 A project can belong to the broader world without becoming a subsystem of another project.
 
+## Mission seriousness
+
+The mission is not rhetorical decoration or an aspirational tagline. It is the serious, governing purpose of this work: to make a real, constructive contribution to the progress and flourishing of humanity by increasing our ability to understand, discover, create, learn, and solve problems.
+
+The scale of that purpose does not justify grandiose claims. No project, model, agent, or contributor should claim progress merely because its architecture is ambitious, its roadmap is long, or its tests pass. Claims of contribution must be earned through observable capability, reproducible evidence, honest limits, and benefit that respects human agency and the well-being of others.
+
+This mission is a direction and a standard of accountability, not a promise that success is guaranteed. Work should remain serious about the aim, humble about what has been achieved, and willing to revise its methods when evidence demands it.
+
 ## Orientation model
 
 An arriving agent should think in this order:
