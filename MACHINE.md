@@ -2,7 +2,7 @@
 
 ## Local development layout
 
-The standard local clone location is:
+The standard local clone location for every project repository is:
 
 ```
 ~/projects/<repo-name>
@@ -15,6 +15,10 @@ Examples:
 ~/projects/episteme
 ~/projects/organs
 ```
+
+**Rule:** When working with a project repository locally, assume its Git clone is under `~/projects/<repo-name>` unless the machine's repository state explicitly shows otherwise.
+
+This is the standard clone location for the user's project repositories. Do not substitute `~/<repo-name>`.
 
 ## Organs installation
 
