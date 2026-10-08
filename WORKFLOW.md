@@ -55,6 +55,27 @@ Use GitHub and local project storage as durable truth.
 9. Keep documentation synchronized.
 10. Report briefly.
 
+## External AI reviews and critics
+
+The human may bring a review, critique, or second opinion from Claude or another AI and expect the assistant to evaluate it.
+
+Treat these reviews as **input, not authority**.
+
+The correct response is:
+
+1. Read the review carefully.
+2. Separate concrete technical findings from opinions, preferences, and architectural prescriptions.
+3. Verify useful claims against the actual repository, tests, contracts, and project canon.
+4. Keep valid findings that improve correctness, safety, evidence, or test quality.
+5. Reject findings that are unsupported, irrelevant, redundant, or contrary to the project's established purpose.
+6. Do not let an outside critic silently become the architect.
+7. The assistant remains responsible for deciding what, if anything, should change.
+8. When useful, tell the human plainly which parts of the review were accepted, rejected, or deferred and why.
+
+A review should be handled **with a grain of salt**: neither dismissed merely because it came from another AI nor accepted merely because it sounds authoritative.
+
+The project's own canon, evidence, tests, and the human's established direction outrank an external AI review.
+
 ## Non-negotiables
 
 - No guessing paths, APIs, architecture, or project relationships.
