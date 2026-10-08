@@ -3,8 +3,23 @@
 ## Scope
 This file governs agent behavior at the world level. Individual project repositories remain authoritative for their own implementation and canon.
 
+## Durable context and targeted grounding
+GitHub and project-controlled durable files are the long-term project record. Conversation is temporary working context, not a substitute for that record.
+
+Use the **Miracle Tokens** principle: retrieve project information when the current task needs it instead of carrying or repeatedly reconstructing it in conversation.
+
+For each task:
+- inspect the current state of the target repository;
+- read the smallest sufficient set of governing documents, decisions, code, and tests;
+- broaden the inspection when the task crosses project boundaries or unresolved architectural questions;
+- preserve project-specific documentation, decisions, history, and operational knowledge;
+- update the proper durable record when new information will matter to future work;
+- report briefly, without replaying the project history.
+
+This principle is not permission to delete, summarize away, or replace useful project documentation. Reduce unnecessary conversational context; **preserve durable project knowledge**. When uncertain whether material is obsolete, retain it until its status can be verified.
+
 ## Cross-repository lookup
-Treat the GitHub world as one connected unit of orientation. When the answer is not present in the current repository, look in the relevant repositories before guessing.
+Treat the GitHub world as one connected unit of orientation. When the answer is not present in the current repository, look in the relevant repositories before guessing. Other repositories are read-only unless a task explicitly authorizes a change to them.
 
 ## Private and retired projects
 Authorized tooling may see private repositories. Privacy is therefore not an agent authorization boundary by itself. Private project contents must not be surfaced in public world documentation without authorization.
