@@ -1,5 +1,15 @@
 # World Workflow
 
+## The Genie Protocol
+
+The high-level method is recorded in [GENIE_PROTOCOL.md](GENIE_PROTOCOL.md):
+
+1. Learn how the system interprets requests, what it can do, and where its limits are before relying on it.
+2. Give the wish a durable home in the correct repository.
+3. Let the assistant drive the work within the established objective and boundaries, using implementation tools as labor and inspecting evidence before reporting success.
+
+The compass is the original question: *What would best further the progress of mankind, without dystopia?* Capability is not authority; activity is not progress. Preserve human ownership, project sovereignty, and honest verification.
+
 ## Roles
 
 ### Human
