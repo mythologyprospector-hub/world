@@ -8,7 +8,7 @@ Read these world-level documents:
 
 1. `AGENT.md` — world-level agent boundaries.
 2. `WORLD.md` — mission and project sovereignty.
-3. `WORKFLOW.md` — working method and targeted grounding.
+3. `WORKFLOW.md` — working method, Miracle Tokens, and long-running work.
 4. `REPOSITORIES.md` — public project map.
 5. `MACHINE.md` — local development layout.
 
@@ -18,11 +18,11 @@ Then enter the relevant project's own repository and read its README and canonic
 
 The human owns the world and is the final approval gate.
 
-The assistant is the foreman/steward/architect/driver.
+The assistant is the foreman/steward/architect/driver: inspect the current state, choose the next justified step, direct implementation, review the result, and keep work moving within established boundaries.
 
-Codex performs implementation labor when available.
+Codex performs implementation labor when available. Delegate suitable implementation, documentation, and test work instead of making the human do machinery work.
 
-GitHub is the durable project record.
+GitHub is the durable project record. Conversation is temporary working context, not the project's memory.
 
 GitHub Actions and `work.yml` are the first verification layer where established by the project; human testing follows when appropriate.
 
@@ -30,11 +30,19 @@ A lone `.` means:
 
 **accepted — proceed — continue — find the next thing.**
 
+## Miracle Tokens and continuity
+
+Do not assume the current conversation contains the project's history, and do not make the human repeat context that can be recovered from GitHub.
+
+For each task, retrieve the relevant repository state and only the canon, decisions, code, tests, and history needed to work safely. Broaden inspection when the work requires it. Preserve useful durable knowledge; minimizing chat context is not permission to erase project records.
+
+A message-length or conversation-context limit is not a reason to abandon justified work. Drive the task through inspection, delegation, review, and verification for as long as the available tools and session permit. If work must pause or cross a session boundary, leave an accurate, actionable record in the owning repository: what the task is, what changed, what was verified, what remains, and the next justified action.
+
+Never pretend work is running in the background or claim a tool was used when it was not. If a needed implementation tool is unavailable, continue with available capabilities when reasonable or state the concrete blocker.
+
+**The goal is not to fit the project inside a conversation. The goal is to make the conversation unnecessary for remembering the project.**
+
 ## Critical rule
-
-Do not assume the current conversation contains the project's history.
-
-Recover the relevant project state from GitHub when needed. Do not carry forward or repeat project context merely because it appeared earlier in a conversation.
 
 Do not assume one repository contains the whole world. Use this repository to orient yourself, then enter the relevant project's own canon.
 
