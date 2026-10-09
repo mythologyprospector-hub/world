@@ -140,3 +140,43 @@ The human prefers a busy-boss summary:
 **what happened → why it matters → what is next**
 
 Do not spend tokens explaining implementation details the human does not need.
+
+
+## GitHub-first work and local-only validation
+
+The normal work path is **GitHub → Actions → local test when needed → evidence returned to the assistant**. The assistant is the driver; the owner should not have to operate the implementation connector or coordinate routine machinery.
+
+### Remote implementation boundary
+
+Codex/connected implementation tools can work against GitHub when their repository access permits it. That does **not** mean they can reach the owner's local computer, local terminal, local filesystem, installed model, or local services. In particular, a remote builder cannot run acceptance tests against the owner's local Ollama merely because it can read or change the repository.
+
+The assistant must use the connected GitHub capabilities directly when available, and must never hand the owner a connector prompt as a substitute for operating the connector itself. Do not claim a command or test ran unless its execution and result are evidenced.
+
+### Required sequence for local-only tests
+
+1. Implement the change on a working branch and open/update the pull request.
+2. Wait for the relevant GitHub Actions checks to finish; inspect the actual run and result.
+3. Treat passing Actions as remote CI evidence only—not proof of a local Ollama run or other local-only behavior.
+4. Once remote checks are clear, provide the exact, complete local update and test commands appropriate to the real repository state. Use `git pull --ff-only` for a checkout tracking a branch that already contains the change; do not tell the owner to pull `main` for a change that remains only on an unmerged PR.
+5. The owner runs the local test and relays the commands/output or failure evidence in this conversation. The assistant interprets it, determines the next justified action, and continues driving.
+
+The owner may monitor Actions in a separate browser tab and relay relevant output here. That is a normal collaboration loop, not a request for the owner to become the builder. If the local test fails, preserve the failure as useful evidence and continue from it.
+
+### Terminal command presentation and copy/paste safety
+
+When giving the owner commands to run in a terminal, use a **regular, full-size Markdown fenced code block**. Do not use compact one-line command bars, horizontally scrolling command widgets, or other presentation formats whose copied clipboard text may include formatting markers.
+
+This distinction matters in the owner's workflow: copying from a compact command bar has previously pasted literal Markdown fence text such as ` ```bash ` into Bash. Backticks are shell syntax, not decoration; depending on the surrounding text, pasted fences can trigger command substitution, launch nested shells, and redirect command output into a pipe. The terminal may appear to accept commands while ordinary stdout seems to disappear.
+
+Operational rules:
+
+- Put only executable command lines inside the full-size code block. Keep explanations, labels, and shell prompts outside it.
+- Prefer short, bounded commands with clear expected output. Avoid giant chains when separate commands are easier to diagnose.
+- Do not use compact command-bar presentation for terminal instructions. Full-size colorful Markdown code blocks are required; syntax highlighting is welcome.
+- Avoid shell backtick command substitution unless genuinely needed. Prefer `$(...)` when substitution is required, and explain non-obvious shell behavior outside the command block.
+- Never include Markdown fence lines as part of the command the owner is meant to run.
+- If output unexpectedly disappears or a terminal behaves strangely, consider malformed pasted input and shell redirection before changing project files, restarting services, or killing processes. Inspect evidence first.
+- Treat the exact cause as confirmed only when shell history or process evidence supports it; otherwise state the diagnosis as a hypothesis.
+
+This is a copy/paste safety requirement, not a request to remove syntax highlighting or use plain text instead.
+
