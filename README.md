@@ -1,4 +1,4 @@
-![World social preview](world.jpeg)
+![World social preview](assets/world.jpeg)
 
 # Mythology Prospector World
 
