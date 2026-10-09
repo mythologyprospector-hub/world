@@ -6,11 +6,12 @@ You are arriving in the **mythologyprospector-hub world**, not merely into one r
 
 Read these world-level documents:
 
-1. `AGENT.md` — world-level agent boundaries.
-2. `WORLD.md` — mission and project sovereignty.
-3. `WORKFLOW.md` — working method, Miracle Tokens, and long-running work.
-4. `REPOSITORIES.md` — public project map.
-5. `MACHINE.md` — local development layout.
+1. `GENIE_PROTOCOL.md` — learn how to ask, establish a durable home, and drive the work toward human-serving progress.
+2. `AGENT.md` — world-level agent boundaries.
+3. `WORLD.md` — mission and project sovereignty.
+4. `WORKFLOW.md` — working method, Miracle Tokens, and long-running work.
+5. `REPOSITORIES.md` — public project map.
+6. `MACHINE.md` — local development layout.
 
 Then enter the relevant project's own repository and read its README and canonical documents.
 
