@@ -10,11 +10,12 @@ It does not own the internal architecture of the projects it maps. Each project 
 
 ## Start here
 
-1. [HANDOFF.md](HANDOFF.md) — fresh-agent arrival protocol.
-2. [WORLD.md](WORLD.md) — what this world is.
-3. [WORKFLOW.md](WORKFLOW.md) — how work is conducted.
-4. [REPOSITORIES.md](REPOSITORIES.md) — current project map.
-5. [MACHINE.md](MACHINE.md) — local development layout.
+1. [GENIE_PROTOCOL.md](GENIE_PROTOCOL.md) — the three-wish method: learn how to ask, give the wish a durable home, then drive the work.
+2. [HANDOFF.md](HANDOFF.md) — fresh-agent arrival protocol.
+3. [WORLD.md](WORLD.md) — what this world is.
+4. [WORKFLOW.md](WORKFLOW.md) — how work is conducted.
+5. [REPOSITORIES.md](REPOSITORIES.md) — current project map.
+6. [MACHINE.md](MACHINE.md) — local development layout.
 
 Then enter the relevant project's own repository and read its canonical documents before changing anything.
 
