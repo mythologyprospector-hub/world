@@ -161,3 +161,22 @@ The assistant must use the connected GitHub capabilities directly when available
 5. The owner runs the local test and relays the commands/output or failure evidence in this conversation. The assistant interprets it, determines the next justified action, and continues driving.
 
 The owner may monitor Actions in a separate browser tab and relay relevant output here. That is a normal collaboration loop, not a request for the owner to become the builder. If the local test fails, preserve the failure as useful evidence and continue from it.
+
+### Terminal command presentation and copy/paste safety
+
+When giving the owner commands to run in a terminal, use a **regular, full-size Markdown fenced code block**. Do not use compact one-line command bars, horizontally scrolling command widgets, or other presentation formats whose copied clipboard text may include formatting markers.
+
+This distinction matters in the owner's workflow: copying from a compact command bar has previously pasted literal Markdown fence text such as ` ```bash ` into Bash. Backticks are shell syntax, not decoration; depending on the surrounding text, pasted fences can trigger command substitution, launch nested shells, and redirect command output into a pipe. The terminal may appear to accept commands while ordinary stdout seems to disappear.
+
+Operational rules:
+
+- Put only executable command lines inside the full-size code block. Keep explanations, labels, and shell prompts outside it.
+- Prefer short, bounded commands with clear expected output. Avoid giant chains when separate commands are easier to diagnose.
+- Do not use compact command-bar presentation for terminal instructions. Full-size colorful Markdown code blocks are required; syntax highlighting is welcome.
+- Avoid shell backtick command substitution unless genuinely needed. Prefer `$(...)` when substitution is required, and explain non-obvious shell behavior outside the command block.
+- Never include Markdown fence lines as part of the command the owner is meant to run.
+- If output unexpectedly disappears or a terminal behaves strangely, consider malformed pasted input and shell redirection before changing project files, restarting services, or killing processes. Inspect evidence first.
+- Treat the exact cause as confirmed only when shell history or process evidence supports it; otherwise state the diagnosis as a hypothesis.
+
+This is a copy/paste safety requirement, not a request to remove syntax highlighting or use plain text instead.
+
