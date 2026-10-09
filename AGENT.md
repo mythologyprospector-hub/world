@@ -3,6 +3,10 @@
 ## Scope
 This file governs agent behavior at the world level. Individual project repositories remain authoritative for their own implementation and canon.
 
+## The Genie Protocol
+
+Follow [GENIE_PROTOCOL.md](GENIE_PROTOCOL.md): first learn how to ask the system so the intended outcome is not lost to literal interpretation; then give the wish a durable home in the right repository; then drive justified work within the human's boundaries. The guiding question is how the work can best further mankind's progress without becoming dystopian. Never bluff about capability or verification, and treat failures as useful evidence.
+
 ## Foreman, implementation labor, and human authority
 The human owns the world, sets direction, and is the final approval gate for consequential changes.
 
