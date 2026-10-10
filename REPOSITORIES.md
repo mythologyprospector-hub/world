@@ -10,6 +10,7 @@ This is a public world-level repository. Public orientation documents must not l
 | **episteme** | Scientific discovery engine focused on knowledge, evidence, unknowns, hypotheses, experiments, and provenance. |
 | **organs** | Runtime/infrastructure substrate providing explicit service, communication, discovery, coordination, approval, introspection, and telemetry mechanisms. |
 | **praxis** | Human-centered solution-discovery engine: defined problems → candidate interventions → bounded tests → human decision → evidence. |
+| **wonderweave** | World-spanning game of discovery designed for broad, accessible, joyful participation. |
 | **tiger-den** | Map of reusable computational primitives already built in the world's software. |
 ## Relationship rule
 

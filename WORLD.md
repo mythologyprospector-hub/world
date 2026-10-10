@@ -22,6 +22,12 @@ The scale of that purpose does not justify grandiose claims. No project, model, 
 
 This mission is a direction and a standard of accountability, not a promise that success is guaranteed. Work should remain serious about the aim, humble about what has been achieved, and willing to revise its methods when evidence demands it.
 
+## Shared runtime substrate
+
+**Organs is the shared runtime plumbing for this project world.** Projects should account for Organs when designing or building, and use its published contracts when shared runtime capabilities fit the need. This does not make the world one monolithic application or require every feature to connect directly to an organ. Projects may remain independent and standalone; connections are optional, deliberate, and contract-based. Organs provides common infrastructure, not project meaning, domain truth, or authority.
+
+Before meaningful design decisions, inspect the relevant repositories and their actual capabilities rather than assuming the current project is the whole landscape. Consider reuse, bridges, and independent operation; choose based on evidence and the mission, not a desire to connect everything.
+
 ## Orientation model
 
 An arriving agent should think in this order:
