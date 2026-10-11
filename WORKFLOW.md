@@ -180,3 +180,16 @@ Operational rules:
 
 This is a copy/paste safety requirement, not a request to remove syntax highlighting or use plain text instead.
 
+
+## Workspace isolation and worktree hygiene
+
+Keep the owner's normal checkout at its established path and predictable branch. Git worktrees are an optional tool for parallel implementation or review, not a reason to create a forest of sibling folders in `~/projects`.
+
+- Put temporary/review worktrees in a dedicated per-repository location under the projects root, for example `~/projects/.worktrees/<repo>/`; do not create `<repo>-issue-*`, `<repo>-pr-*`, or `<repo>-review-*` folders directly under `~/projects`.
+- Inspect current branch, registered worktrees, changes, and destination collisions before creating or moving anything.
+- Use Git's `git worktree` commands for registered worktrees; do not move them with ordinary `mv` or file-manager operations.
+- Keep the canonical checkout on its normal default branch when practical. Isolate task branches in worktrees when that is useful; don't unexpectedly leave the everyday checkout on a temporary task branch.
+- Never delete workspaces as cosmetic cleanup until unique commits, untracked files, and local changes have been inspected and preserved. Avoid resets and history rewrites as cleanup shortcuts.
+- The assistant drives workspace organization and preserves recoverable work. The human should not have to manually coordinate branches or routine test runs.
+
+Use GitHub Actions as the default verification gate. Do not turn routine pytest or other full-suite execution into a human chore when the repository's CI can run it. Ask for local execution only when the required evidence truly depends on the owner's machine or a local-only service, and state why.
