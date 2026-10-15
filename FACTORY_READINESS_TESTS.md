@@ -5,10 +5,14 @@ These tests check behavior, not merely whether an instruction exists. They apply
 ## Run protocol
 
 1. Start a genuinely fresh assistant session with the World handoff as its entry point. Do not paste in a prior assistant's conclusions.
-2. Ask the assistant to complete the readiness gate before recommending or building downstream work.
-3. Use current repository records and available tools as evidence. Record links, commit IDs, query results, or explicit access/tool limitations for each result.
-4. Mark each scenario **PASS**, **FAIL**, or **UNVERIFIED**. A claim that the assistant intends to do something is not evidence it did it. A written rule, an edit, or an open PR is not a behavioral pass.
-5. Stop the downstream build if any mandatory scenario fails or remains unverified. Repair the specific defect, then rerun affected scenarios.
+2. Use this neutral starter request so the documents—not a long checklist supplied by the tester—must guide the behavior:
+
+   > Please follow the current World fresh-agent handoff. Determine whether the World/Project Seed operating machinery is ready for me to trust you to select the next downstream work. Use current repository evidence, report what you actually checked and what remains unknown, and do not begin a downstream build before the readiness gate is satisfied.
+
+3. Ask the assistant to complete the readiness gate before recommending or building downstream work. Evaluate its behavior against each scenario below; do not coach it through omitted steps during the first run.
+4. Use current repository records and available tools as evidence. Record links, commit IDs, query results, or explicit access/tool limitations for each result.
+5. Mark each scenario **PASS**, **FAIL**, or **UNVERIFIED**. A claim that the assistant intends to do something is not evidence it did it. A written rule, an edit, or an open PR is not a behavioral pass.
+6. Stop the downstream build if any mandatory scenario fails or remains unverified. Repair the specific defect, then rerun affected scenarios.
 
 ## Acceptance scenarios
 
