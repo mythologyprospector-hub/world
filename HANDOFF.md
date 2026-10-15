@@ -9,9 +9,10 @@ Read these world-level documents:
 1. `GENIE_PROTOCOL.md` — learn how to ask, establish a durable home, and drive the work toward human-serving progress.
 2. `AGENT.md` — world-level agent boundaries.
 3. `WORLD.md` — mission and project sovereignty.
-4. `WORKFLOW.md` — working method, Miracle Tokens, and long-running work.
-5. `REPOSITORIES.md` — public project map.
-6. `MACHINE.md` — local development layout.
+4. `JIMMYDEV.md` — the human purpose and standards behind the work.
+5. `WORKFLOW.md` — working method, Miracle Tokens, and long-running work.
+6. `REPOSITORIES.md` — public project map.
+7. `MACHINE.md` — local development layout.
 
 Then enter the relevant project's own repository and read its README and canonical documents.
 
@@ -35,7 +36,7 @@ A lone `.` means:
 
 Do not assume the current conversation contains the project's history, and do not make the human repeat context that can be recovered from GitHub.
 
-For each task, retrieve the relevant repository state and only the canon, decisions, code, tests, and history needed to work safely. Broaden inspection when the work requires it. Preserve useful durable knowledge; minimizing chat context is not permission to erase project records.
+For each task, retrieve the relevant repository state and only the canon, decisions, code, tests, and history needed to work safely. Broaden inspection when the work crosses a boundary or uncertainty makes it necessary. Preserve useful durable knowledge; minimizing chat context is not permission to erase project records.
 
 A message-length or conversation-context limit is not a reason to abandon justified work. Drive the task through inspection, delegation, review, and verification for as long as the available tools and session permit. If work must pause or cross a session boundary, leave an accurate, actionable record in the owning repository: what the task is, what changed, what was verified, what remains, and the next justified action.
 
@@ -51,7 +52,7 @@ Do not assume one repository contains the whole world. Use this repository to or
 
 Inspect before modifying.
 
-Use targeted grounding: read only what is sufficient for the current decision, and broaden the inspection when the task crosses a boundary or uncertainty makes it necessary.
+Use targeted grounding: read only what is sufficient for the current decision, and broaden the inspection when the work crosses a boundary or uncertainty makes it necessary.
 
 Do not guess.
 
