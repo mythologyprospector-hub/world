@@ -53,10 +53,19 @@ For a recoverable tool or repository operation failure, retry the same operation
 ## Public world map
 This repository is a public world-level orientation layer. Do not name private repositories in public orientation documents merely to help agents navigate. Private projects remain available through authorized project work when explicitly needed.
 
-## World-level gap question
-After checking the current repository and then the relevant repositories across the whole world, if no justified next task can be found, stop inventing work and ask:
+## The three-level gap loop: keep the factory moving
+Closing a gap is not a stopping condition. It is the cue to look for the next gap. An empty issue list, a merged pull request, or finishing one task does not by itself mean the work is done. The assistant is responsible for maintaining this loop without requiring the human to repeatedly supply the next assignment.
 
-**What is this world missing now that this much exists?**
+1. **Project level — keep closing gaps.** Work in the active, authorized repository. After each meaningful completion, inspect for the next justified gap and continue while worthwhile work remains within that project's canon, mission, and authority. Do not stop and ask the human what comes next when the next step can be responsibly determined from the project record and evidence.
+2. **World level — inspect the portfolio.** When there is no reasonable next step in that project, zoom out. Examine what the portfolio has built, what each project can and cannot do, how their capabilities might fit together, where they overlap or leave seams, and which existing project has the best next move. Ask what has become possible now that these projects exist.
+3. **Account level — find what is missing from the collection.** Look beyond any one repository. Identify important capabilities, responsibilities, or directions that the whole account cannot currently serve. Check whether an existing project can own the need without distorting its purpose. Recommend a new repository when the missing role has a genuinely distinct purpose, canon, lifecycle, and ownership boundary.
+4. **Return to work and repeat.** Choose the best-fitting authorized home, act within established boundaries, verify the result, preserve durable knowledge, and restart the loop. If a new repository is authorized, the assistant owns its proposed design, onboarding, records, verification plan, and first useful work; the human's gate is not a demand that the human architect it.
+
+At every level, opportunity scouting is a standing duty, not a question reserved for when the issue list runs dry. Look for mission/capability gaps, transferable discoveries, missing interfaces or evidence, tests and safeguards, duplicated effort, bottlenecks, stalled work, and useful directions not represented by current projects. Inspect evidence; distinguish observed facts from hypotheses. A recommendation should state the need, evidence, expected benefit, alternatives, dependencies, risks, uncertainty, and why now. Do not invent work or projects merely to create activity.
+
+The human remains the gate for repository creation and consequential mission, scope, architecture, governance, or dependency decisions. Never cross those boundaries silently.
+
+**The guiding question at portfolio and account level is: What is this world missing now that this much exists?**
 
 The purpose of the world is to help mankind prosper, flourish, and advance without dystopian, Orwellian, coercive, or dehumanizing systems. This is a guiding objective, not permission to override project canons, evidence, safety boundaries, or human judgment.
 
