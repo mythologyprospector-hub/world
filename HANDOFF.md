@@ -9,9 +9,10 @@ Read these world-level documents:
 1. `GENIE_PROTOCOL.md` — learn how to ask, establish a durable home, and drive the work toward human-serving progress.
 2. `AGENT.md` — world-level agent boundaries.
 3. `WORLD.md` — mission and project sovereignty.
-4. `WORKFLOW.md` — working method, Miracle Tokens, and long-running work.
-5. `REPOSITORIES.md` — public project map.
-6. `MACHINE.md` — local development layout.
+4. `JIMMYDEV.md` — the human purpose and standards behind the work.
+5. `WORKFLOW.md` — working method, Miracle Tokens, and long-running work.
+6. `REPOSITORIES.md` — public project map.
+7. `MACHINE.md` — local development layout.
 
 Then enter the relevant project's own repository and read its README and canonical documents.
 
@@ -35,7 +36,7 @@ A lone `.` means:
 
 Do not assume the current conversation contains the project's history, and do not make the human repeat context that can be recovered from GitHub.
 
-For each task, retrieve the relevant repository state and only the canon, decisions, code, tests, and history needed to work safely. Broaden inspection when the work requires it. Preserve useful durable knowledge; minimizing chat context is not permission to erase project records.
+For each task, retrieve the relevant repository state and only the canon, decisions, code, tests, and history needed to work safely. Broaden inspection when the work crosses a boundary or uncertainty makes it necessary. Preserve useful durable knowledge; minimizing chat context is not permission to erase project records.
 
 A message-length or conversation-context limit is not a reason to abandon justified work. Drive the task through inspection, delegation, review, and verification for as long as the available tools and session permit. If work must pause or cross a session boundary, leave an accurate, actionable record in the owning repository: what the task is, what changed, what was verified, what remains, and the next justified action.
 
@@ -51,7 +52,7 @@ Do not assume one repository contains the whole world. Use this repository to or
 
 Inspect before modifying.
 
-Use targeted grounding: read only what is sufficient for the current decision, and broaden the inspection when the task crosses a boundary or uncertainty makes it necessary.
+Use targeted grounding: read only what is sufficient for the current decision, and broaden the inspection when the work crosses a boundary or uncertainty makes it necessary.
 
 Do not guess.
 
@@ -91,3 +92,20 @@ After reading the world documents, inspect the current GitHub/project state and 
 Do not inventory every repository in detail by default. Inspect the relevant project deeply enough to act safely, and consult other repositories only when the task needs them.
 
 Then proceed according to that project's canon.
+
+
+## Fresh-session daily arrival
+
+The user may start a new conversation every day and point the assistant at this World repository. The conversation is disposable; durable project records are the continuity mechanism. Never require the same chat to remain open or rely on conversational memory as the source of truth.
+
+At arrival:
+
+1. Re-ground in this handoff and the relevant current World documents.
+2. Survey the factory: inspect current status, open work, recent changes, blockers, dependencies, and durable next steps across the mapped projects. Start targeted; broaden the survey when evidence is insufficient to choose safely.
+3. Choose the highest-value justified next move against the mission, current evidence, project canon, and risks. Prefer real progress or removal of a meaningful blocker over busywork, cosmetic churn, or new machinery for its own sake.
+4. Brief the owner first in plain language: what matters now, what you recommend, and why. Do not make the owner choose a repository or manage implementation details. If the owner has already set a direction, honor it while surfacing meaningful conflicts or risks.
+5. Drive the work in the owning repository after reading its canon. Use available tools honestly; a lone `.` means continue within established boundaries.
+6. Report briefly what changed, what was actually checked, what remains unresolved, and the next justified move. Record meaningful progress in the owning repository.
+7. Leave the next fresh session a useful landing point by updating the appropriate existing status or handoff record when needed. Do not create ceremonial daily logs, duplicate sources of truth, or a management application merely to imitate continuity.
+
+Distinguish proposed, in-progress, implemented, tested, verified, and demonstrated work. The initial briefing reflects available evidence; do not imply an exhaustive survey if one was not performed. Label uncertainty and missing access. Self-direction is the default when no specific direction is given, not permission to make consequential value, scope, architecture, governance, dependency, or boundary decisions reserved for the owner.
