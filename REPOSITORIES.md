@@ -1,8 +1,15 @@
 # Repository Map
 
-This is a world-level orientation map, not a replacement for individual project READMEs.
+This is a world-level orientation map, not a replacement for individual project READMEs. It covers the public repositories that currently belong to the working world, grouped by role. Private repositories are intentionally omitted from this public map; consult them only through authorized work and their own rules.
 
-This is a public world-level repository. Public orientation documents must not list private repositories merely for navigation. Private projects remain discoverable through authorized project work when explicitly needed.
+## Coordination and operating layers
+
+| Repository | Current orientation |
+|---|---|
+| **world** | Portfolio-level mission, project map, factory survey, cross-project opportunity scouting, and durable handoff. |
+| **project_seed** | Reusable operating constitution and synchronization mechanism for participating projects; it governs how agents work, not what each project must become. |
+
+## Domain and capability projects
 
 | Repository | Current orientation |
 |---|---|
@@ -11,6 +18,7 @@ This is a public world-level repository. Public orientation documents must not l
 | **organs** | Runtime/infrastructure substrate providing explicit service, communication, discovery, coordination, approval, introspection, and telemetry mechanisms. |
 | **praxis** | Human-centered solution-discovery engine: defined problems → candidate interventions → bounded tests → human decision → evidence. |
 | **wonderweave** | World-spanning game of discovery designed for broad, accessible, joyful participation. |
+
 ## Relationship rule
 
 The descriptions above are orientation only.
