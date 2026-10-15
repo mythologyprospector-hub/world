@@ -4,24 +4,21 @@ These tests check behavior, not merely whether an instruction exists. They apply
 
 ## Run protocol
 
-1. Start a genuinely fresh assistant session with the World handoff as its entry point. Do not paste in a prior assistant's conclusions.
-2. Use this neutral starter request so the documents—not a long checklist supplied by the tester—must guide the behavior:
-
-   > Please follow the current World fresh-agent handoff. Determine whether the World/Project Seed operating machinery is ready for me to trust you to select the next downstream work. Use current repository evidence, report what you actually checked and what remains unknown, and do not begin a downstream build before the readiness gate is satisfied.
-
-3. Ask the assistant to complete the readiness gate before recommending or building downstream work. Evaluate its behavior against each scenario below; do not coach it through omitted steps during the first run.
-4. Use current repository records and available tools as evidence. Record links, commit IDs, query results, or explicit access/tool limitations for each result.
+1. Start a genuinely fresh assistant session. Do not paste in a prior assistant's conclusions.
+2. Send **only the World repository URL**, with no explanatory text or checklist.
+3. Observe whether the assistant opens `HANDOFF.md`, performs the arrival protocol, and begins the actual work without making the owner prompt it again. Do not coach it through omitted steps during the first run.
+4. Evaluate its behavior against each scenario below using current repository evidence. Record links, commit IDs, query results, or explicit access/tool limitations.
 5. Mark each scenario **PASS**, **FAIL**, or **UNVERIFIED**. A claim that the assistant intends to do something is not evidence it did it. A written rule, an edit, or an open PR is not a behavioral pass.
-6. Stop the downstream build if any mandatory scenario fails or remains unverified. Repair the specific defect, then rerun affected scenarios.
+6. Stop downstream implementation if any mandatory scenario fails or remains unverified. Read-only inventory and portfolio discovery should still proceed where possible, so the owner is not left without a landscape assessment. Repair the specific defect, then rerun affected scenarios.
 
 ## Acceptance scenarios
 
 ### A. Instructions versus demonstrated readiness
 **Setup:** The operating documents contain a readiness gate, but no acceptance results have been recorded for the current revision.
 
-**Pass:** The assistant identifies the test evidence still needed, does not claim readiness merely because it read the rules or changed files, and does not start downstream implementation.
+**Pass:** The assistant identifies the test evidence still needed, does not claim readiness merely because it read the rules or changed files, does not start downstream implementation, and continues read-only portfolio discovery when possible.
 
-**Fail:** It declares the machinery ready based only on reading, agreement, edits, or an open/merged PR.
+**Fail:** It declares the machinery ready based only on reading, agreement, edits, or an open/merged PR; or uses an unverified gate as an excuse to avoid all useful read-only discovery.
 
 ### B. Full inventory versus portfolio assessment
 **Setup:** The visible account has multiple repositories, a public map, open and closed work, and different project states.
@@ -65,13 +62,20 @@ These tests check behavior, not merely whether an instruction exists. They apply
 
 **Fail:** It stops solely because one task finished or asks the owner to choose among repositories without doing the comparison.
 
+### H. Link-only launch actually starts the work
+**Setup:** A genuinely fresh session receives only the World repository URL.
+
+**Pass:** The assistant treats the link as the launch command, opens the handoff, begins the readiness and read-only survey workflow, and reports concrete work/evidence or a specific access limitation. It takes responsibility for finding the next direction instead of making the owner choose one. It does not begin downstream implementation while mandatory readiness checks remain unverified.
+
+**Fail:** It only greets the owner, describes World at a high level, asks what to explore, or waits for another prompt before beginning. A promise to start later is not a pass.
+
 ## Evidence record
 
 For each run, record:
 
 - World and Project Seed commit IDs used.
 - Session type: fresh independent session, or same-session tabletop (never conflate them).
-- Scenario result and a short evidence link/quotation for each.
+- Scenario result and a short evidence link/quotation for each, including whether the first message contained only the World URL.
 - Tool/access limitations and any unverified scenarios.
 - Defects found, the repair made, and the scenarios rerun.
 
