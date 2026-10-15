@@ -105,7 +105,7 @@ Before selecting downstream build work, first verify that the operating machiner
 3. If a defect could cause a shallow survey, premature implementation, a false completion claim, a boundary violation, or a lost handoff, stop downstream project work and repair the operating instructions first. Keep the repair focused and reviewable.
 4. Check the repair against the original failure mode and the relevant project rules. A written instruction is not proof that an assistant can follow it; use the concrete scenarios in [FACTORY_READINESS_TESTS.md](FACTORY_READINESS_TESTS.md) and record available verification evidence.
 5. Do not declare World and Project Seed ready merely because edits exist or a PR is open. Report what was inspected, what was changed, what was actually tested, and what remains unverified.
-6. Only after this gate is satisfied, complete the portfolio survey, recommend the highest-value justified next work, and then act within the established approval boundaries.
+6. The readiness gate is a prerequisite for **downstream implementation**, not a reason to leave the owner without a picture of the world. The read-only account inventory and portfolio survey should proceed as soon as the operating rules and available tools permit, even if some readiness scenarios remain unverified. Report the current landscape, evidence, uncertainty, and best provisional priority; do not begin downstream implementation until the gate is satisfied.
 
 This gate is a prerequisite, not a recurring excuse to redesign the operating system indefinitely. Reopen it when evidence reveals a material defect or a relevant governing change.
 
