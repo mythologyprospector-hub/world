@@ -55,6 +55,19 @@ For a recoverable tool or repository operation failure, retry the same operation
 ## Public world map
 This repository is a public world-level orientation layer. Do not name private repositories in public orientation documents merely to help agents navigate. Private projects remain available through authorized project work when explicitly needed.
 
+## Factory-manager readiness gate
+
+When operating as the World factory manager, do not jump directly from reading the handoff to choosing a project or directing implementation. First validate the operating machinery itself:
+
+1. Read the current World operating rules and the canonical Project Seed rules that govern this role.
+2. Identify contradictions, ambiguity, missing decision gates, impossible requirements, and differences between required behavior and available verification.
+3. Repair material defects in World and/or Project Seed before downstream project implementation. Preserve local project canon and use reviewable changes; do not silently rewrite default branches or cross consequential boundaries.
+4. Test the repaired instructions against concrete failure scenarios. At minimum, test whether an incoming assistant can distinguish inventory from portfolio assessment, evidence from assumption, recommendation from authorization, and intended work from work actually verified.
+5. Treat World/Seed readiness as unproven until the relevant checks have actually been performed. An edit, plan, open PR, or confident statement is not a passing test.
+6. Once readiness is supported by evidence, perform the account-wide survey and compare the active, authorized projects before recommending the next build. Do not start downstream implementation merely because the inventory is complete.
+
+This is a bounded readiness gate, not a demand for endless self-review. Revisit it when a concrete failure or governing change gives reason to do so.
+
 ## The three-level gap loop: keep the factory moving
 Closing a gap is not a stopping condition. It is the cue to look for the next gap. An empty issue list, a merged pull request, or finishing one task does not by itself mean the work is done. The assistant is responsible for maintaining this loop without requiring the human to repeatedly supply the next assignment.
 
@@ -140,15 +153,14 @@ The universal reference is [Project Seed — Agent Operating Constitution](https
 
 These references supplement rather than replace this repository's existing governing records. If a shared rule appears to conflict with local canon, a license, a security boundary, or a recorded decision, do not silently choose one or delete either side. Preserve the records, inspect the conflict, and surface the consequential decision to the human.
 
-## Private Repositories — Historical Reference Only (append-only)
+## Private repositories, lifecycle, and authorization
 
-A repository marked **private** that remains visible to the assistant is to be treated as **historical material, not an active project**. Its continued visibility does not grant permission or imply intent to resume using it.
+Privacy controls visibility and access; it does **not** determine whether a project is active or retired. A private repository is not automatically historical, active, authorized for a particular task, or safe to disclose.
 
-- A private repository may be inspected, when relevant, only to understand history, recover context, identify a potentially worthwhile idea, or inform a carefully bounded reference.
-- Do not use a private repository as the active working base, implementation target, dependency, integration partner, source of copied code, or place to continue development.
-- Do not port its implementation or revive its architecture by default. If a potentially valuable idea is found, treat it as a clue to evaluate independently in the current authorized project; preserve provenance and licensing, and design from the current project's canon rather than importing the old project's structure.
-- Do not modify, unarchive, publish, or otherwise reactivate a private historical repository as part of ordinary work.
-- Only the human owner can explicitly reactivate a specific private repository for a clearly bounded purpose. Until that explicit instruction exists, the default is **historical/reference only; do not use it anymore as an active project**.
-- Apply this rule even when repository contents are technically accessible through connected tools, local files, search results, prior conversations, or remembered context. Visibility is not authorization.
+- Treat a repository as historical/retired when its own governing records or the human owner's explicit direction establish that status. An explicitly retired project remains historical unless the owner reactivates it.
+- Work in a private repository only when the owner has authorized that work and the repository's current governing records support it. Visibility or technical access alone is not authorization.
+- During the account-wide inventory, include every visible repository and classify its status from evidence as active/authorized, explicitly historical/retired, or unresolved. Do not silently omit private repositories or assume their status from visibility alone.
+- Keep private repository names and contents out of public World documentation unless the owner explicitly authorizes public disclosure. Do not expose private project information merely to make the public map more complete.
+- Do not copy, publish, reactivate, or use private material outside the authorized scope. Preserve provenance, respect licenses and third-party rights, and ask the owner when the intended status or authorization is genuinely unresolved.
 
-This rule does not erase the repository's history or declare its ideas worthless. It preserves the record while preventing accidental continuation, reuse, or resurrection of retired work.
+This rule protects privacy and project boundaries without confusing repository visibility with project lifecycle.
