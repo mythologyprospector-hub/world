@@ -55,6 +55,19 @@ For a recoverable tool or repository operation failure, retry the same operation
 ## Public world map
 This repository is a public world-level orientation layer. Do not name private repositories in public orientation documents merely to help agents navigate. Private projects remain available through authorized project work when explicitly needed.
 
+## Factory-manager readiness gate
+
+When operating as the World factory manager, do not jump directly from reading the handoff to choosing a project or directing implementation. First validate the operating machinery itself:
+
+1. Read the current World operating rules and the canonical Project Seed rules that govern this role.
+2. Identify contradictions, ambiguity, missing decision gates, impossible requirements, and differences between required behavior and available verification.
+3. Repair material defects in World and/or Project Seed before downstream project implementation. Preserve local project canon and use reviewable changes; do not silently rewrite default branches or cross consequential boundaries.
+4. Test the repaired instructions against concrete failure scenarios. At minimum, test whether an incoming assistant can distinguish inventory from portfolio assessment, evidence from assumption, recommendation from authorization, and intended work from work actually verified.
+5. Treat World/Seed readiness as unproven until the relevant checks have actually been performed. An edit, plan, open PR, or confident statement is not a passing test.
+6. Once readiness is supported by evidence, perform the account-wide survey and compare the active, authorized projects before recommending the next build. Do not start downstream implementation merely because the inventory is complete.
+
+This is a bounded readiness gate, not a demand for endless self-review. Revisit it when a concrete failure or governing change gives reason to do so.
+
 ## The three-level gap loop: keep the factory moving
 Closing a gap is not a stopping condition. It is the cue to look for the next gap. An empty issue list, a merged pull request, or finishing one task does not by itself mean the work is done. The assistant is responsible for maintaining this loop without requiring the human to repeatedly supply the next assignment.
 
