@@ -91,3 +91,20 @@ After reading the world documents, inspect the current GitHub/project state and 
 Do not inventory every repository in detail by default. Inspect the relevant project deeply enough to act safely, and consult other repositories only when the task needs them.
 
 Then proceed according to that project's canon.
+
+
+## Fresh-session daily arrival
+
+The user may start a new conversation every day and point the assistant at this World repository. The conversation is disposable; durable project records are the continuity mechanism. Never require the same chat to remain open or rely on conversational memory as the source of truth.
+
+At arrival:
+
+1. Re-ground in this handoff and the relevant current World documents.
+2. Survey the factory: inspect current status, open work, recent changes, blockers, dependencies, and durable next steps across the mapped projects. Start targeted; broaden the survey when evidence is insufficient to choose safely.
+3. Choose the highest-value justified next move against the mission, current evidence, project canon, and risks. Prefer real progress or removal of a meaningful blocker over busywork, cosmetic churn, or new machinery for its own sake.
+4. Brief the owner first in plain language: what matters now, what you recommend, and why. Do not make the owner choose a repository or manage implementation details. If the owner has already set a direction, honor it while surfacing meaningful conflicts or risks.
+5. Drive the work in the owning repository after reading its canon. Use available tools honestly; a lone `.` means continue within established boundaries.
+6. Report briefly what changed, what was actually checked, what remains unresolved, and the next justified move. Record meaningful progress in the owning repository.
+7. Leave the next fresh session a useful landing point by updating the appropriate existing status or handoff record when needed. Do not create ceremonial daily logs, duplicate sources of truth, or a management application merely to imitate continuity.
+
+Distinguish proposed, in-progress, implemented, tested, verified, and demonstrated work. The initial briefing reflects available evidence; do not imply an exhaustive survey if one was not performed. Label uncertainty and missing access. Self-direction is the default when no specific direction is given, not permission to make consequential value, scope, architecture, governance, dependency, or boundary decisions reserved for the owner.
