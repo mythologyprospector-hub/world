@@ -12,8 +12,6 @@ It does not own the internal architecture of the projects it maps. Each project 
 
 For a fresh session, point the assistant at this repository and begin with [HANDOFF.md](HANDOFF.md). It defines how to re-ground in World, survey the factory, choose the next justified direction, and leave durable continuity without depending on yesterday's conversation.
 
-For a fresh session, point the assistant at this repository and begin with [HANDOFF.md](HANDOFF.md). It defines how to re-ground in the current World, survey the factory, choose the next justified direction, and leave durable continuity—without depending on this conversation or yesterday's chat.
-
 The governing references are:
 
 1. [GENIE_PROTOCOL.md](GENIE_PROTOCOL.md) — learn how to ask, give the wish a durable home, then drive the work.
