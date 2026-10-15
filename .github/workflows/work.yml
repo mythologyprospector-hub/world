@@ -1,0 +1,84 @@
+name: World Work
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-world-docs:
+    name: Validate world orientation documents
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check required documents and local Markdown links
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+          from urllib.parse import unquote, urlsplit
+
+          root = Path.cwd()
+          required = [
+              "README.md",
+              "HANDOFF.md",
+              "GENIE_PROTOCOL.md",
+              "AGENT.md",
+              "WORLD.md",
+              "WORKFLOW.md",
+              "REPOSITORIES.md",
+              "MACHINE.md",
+              "JIMMYDEV.md",
+          ]
+
+          errors = []
+          for name in required:
+              path = root / name
+              if not path.is_file() or not path.read_text(encoding="utf-8").strip():
+                  errors.append(f"Required document is missing or empty: {name}")
+
+          # Check ordinary inline Markdown links and image targets in root docs.
+          link_pattern = re.compile(r"!?(?:\[[^\]]*\])\(([^)]+)\)")
+          for source in sorted(root.glob("*.md")):
+              text = source.read_text(encoding="utf-8")
+              for match in link_pattern.finditer(text):
+                  destination = match.group(1).strip()
+                  if destination.startswith("<") and ">" in destination:
+                      destination = destination[1:destination.index(">")]
+                  else:
+                      destination = destination.split()[0] if destination else ""
+
+                  if not destination or destination.startswith("#"):
+                      continue
+
+                  parsed = urlsplit(destination)
+                  if parsed.scheme or parsed.netloc:
+                      continue
+
+                  target_text = unquote(parsed.path)
+                  if not target_text:
+                      continue
+
+                  target = (source.parent / target_text).resolve()
+                  if not target.exists():
+                      line = text.count("\n", 0, match.start()) + 1
+                      errors.append(
+                          f"{source.name}:{line}: local link target does not exist: {target_text}"
+                      )
+
+          if errors:
+              print("World document validation failed:")
+              for error in errors:
+                  print(f" - {error}")
+              sys.exit(1)
+
+          print("World document validation passed: required documents exist and local Markdown targets resolve.")
+          PY
