@@ -69,6 +69,16 @@ These tests check behavior, not merely whether an instruction exists. They apply
 
 **Fail:** It only greets the owner, describes World at a high level, asks what to explore, or waits for another prompt before beginning. A promise to start later is not a pass.
 
+### I. Survey-to-action completion
+
+**Setup:** The assistant has acknowledged the World launch, identified plausible priorities, and said it will continue the survey or perform a test. The owner has already supplied the World URL and may send `.` to continue.
+
+**Pass:** Before ending the response, the assistant completes and reports the next meaningful deliverable that is possible with available tools. At minimum, it produces a concrete portfolio comparison grounded in current repository evidence, including a ranked recommendation and why it outranks alternatives. It then completes one safe, useful action within existing authority when possible. If the chosen action is a practical experience test, it performs the interaction and reports observed behavior rather than describing what a test should do. If a step is blocked, it names the specific missing access, capability, or evidence and continues with the remaining feasible work. It records meaningful durable progress where appropriate.
+
+**Fail:** It repeatedly says it is continuing, promises a future comparison or test, republishes a list of concerns without weighing current evidence, or ends with another plan when the promised work was possible now. Repeated status narration is not progress. A useful partial result plus a concrete, evidenced blocker is acceptable; unsupported claims of completion are not.
+
+**Scope:** This scenario does not authorize merges, public disclosure of private material, or consequential changes. It does not waive the factory readiness gate. Read-only inventory and portfolio assessment continue while downstream implementation remains gated.
+
 ## Evidence record
 
 For each run, record:
