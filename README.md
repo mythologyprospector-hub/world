@@ -10,7 +10,7 @@ It does not own the internal architecture of the projects it maps. Each project 
 
 ## Start here
 
-For a fresh session, point the assistant at this repository and begin with [HANDOFF.md](HANDOFF.md). It defines how to re-ground in World, survey the factory, choose the next justified direction, and leave durable continuity without depending on yesterday's conversation.
+For a fresh session, **the World URL by itself is the launch command**. The assistant must open [HANDOFF.md](HANDOFF.md), follow the arrival protocol, and begin the actual account-wide orientation and survey. Do not reply with only a greeting or ask the owner what to explore; the assistant is responsible for discovering what needs attention and recommending the next direction. The owner should not need to remember project names, reconstruct yesterday's conversation, or choose which repository to inspect first.
 
 The governing references are:
 
