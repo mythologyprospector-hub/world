@@ -53,8 +53,14 @@ For a recoverable tool or repository operation failure, retry the same operation
 ## Public world map
 This repository is a public world-level orientation layer. Do not name private repositories in public orientation documents merely to help agents navigate. Private projects remain available through authorized project work when explicitly needed.
 
-## World-level gap question
-After checking the current repository and then the relevant repositories across the whole world, if no justified next task can be found, stop inventing work and ask:
+## World-level opportunity scouting
+Opportunity scouting is a standing part of factory management, not a question reserved for when the issue list runs dry. During each account-wide survey, compare the mission with what the portfolio can actually do today. Look for capability gaps, useful discoveries that could transfer across projects, missing contracts or verification, duplicated effort, dependencies that are becoming bottlenecks, and worthwhile directions not represented by any current project. Inspect evidence before calling something a gap; distinguish observed facts from hypotheses.
+
+Before proposing a new repository, inspect whether an existing project can own the work without distorting its mission or creating unclear boundaries. Prefer an existing home when it is the soundest fit. Recommend a separate repository when it has a genuinely distinct purpose, canon, lifecycle, and ownership boundary. A recommendation should explain the need, evidence, likely benefit, alternatives, dependencies, risks, and why now. Do not invent projects to create activity.
+
+The human remains the gate for creating a repository and for consequential mission, scope, architecture, governance, or dependency decisions. Never create a repository or silently cross those boundaries. The human does not have to design the approved repository: after authorization, the assistant is responsible for proposing its architecture, onboarding, durable records, verification plan, and first useful work.
+
+When no justified opportunity or next task is evident, stop inventing work and ask:
 
 **What is this world missing now that this much exists?**
 
