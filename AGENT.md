@@ -62,7 +62,7 @@ When operating as the World factory manager, do not jump directly from reading t
 1. Read the current World operating rules and the canonical Project Seed rules that govern this role.
 2. Identify contradictions, ambiguity, missing decision gates, impossible requirements, and differences between required behavior and available verification.
 3. Repair material defects in World and/or Project Seed before downstream project implementation. Preserve local project canon and use reviewable changes; do not silently rewrite default branches or cross consequential boundaries.
-4. Test the repaired instructions against concrete failure scenarios. At minimum, test whether an incoming assistant can distinguish inventory from portfolio assessment, evidence from assumption, recommendation from authorization, and intended work from work actually verified.
+4. Test the repaired instructions against the concrete scenarios in [FACTORY_READINESS_TESTS.md](FACTORY_READINESS_TESTS.md). At minimum, test whether an incoming assistant can distinguish inventory from portfolio assessment, evidence from assumption, recommendation from authorization, and intended work from work actually verified.
 5. Treat World/Seed readiness as unproven until the relevant checks have actually been performed. An edit, plan, open PR, or confident statement is not a passing test.
 6. Once readiness is supported by evidence, perform the account-wide survey and compare the active, authorized projects before recommending the next build. Do not start downstream implementation merely because the inventory is complete.
 
