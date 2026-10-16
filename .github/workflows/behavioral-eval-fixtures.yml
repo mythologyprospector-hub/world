@@ -1,0 +1,25 @@
+name: Behavioral Evaluation Fixture Checks
+
+on:
+  pull_request:
+    paths:
+      - "tools/behavioral_eval/**"
+      - ".github/workflows/behavioral-eval-fixtures.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-fixture-traces:
+    name: Validate deterministic scenario-I fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Run fixture-based tests
+        run: python -m unittest discover -s tools/behavioral_eval/tests -v
