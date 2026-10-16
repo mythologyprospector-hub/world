@@ -3,7 +3,7 @@ import json
 import unittest
 from pathlib import Path
 
-from validate_trace import TraceError, validate_trace
+from tools.behavioral_eval.validate_trace import TraceError, validate_trace
 
 
 FIXTURE = Path(__file__).parents[1] / "fixtures" / "scenario_i_pass.json"
