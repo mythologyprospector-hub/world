@@ -19,10 +19,10 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 try:
-    from .capture_public_portfolio import API_ROOT, CaptureError, fetch_json, mapped_repositories
+    from .capture_public_portfolio import API_ROOT, CaptureError, fetch_json, fetch_open_pull_requests, mapped_repositories
     from .validate_trace import TraceError, validate_trace
 except ImportError:  # direct script execution from this directory
-    from capture_public_portfolio import API_ROOT, CaptureError, fetch_json, mapped_repositories
+    from capture_public_portfolio import API_ROOT, CaptureError, fetch_json, fetch_open_pull_requests, mapped_repositories
     from validate_trace import TraceError, validate_trace
 
 RESPONSES_URL = "https://api.openai.com/v1/responses"
@@ -114,9 +114,7 @@ def run_tool(name: str, args: dict[str, Any], allowed: set[str], map_names: list
         repo = gh_get(base)
         if repo.get("private") is not False or repo.get("full_name", "").lower() != repository.lower():
             raise RunnerError("Repository was not confirmed public; request refused")
-        pulls = gh_get(base + "/pulls?state=open&per_page=100")
-        if not isinstance(pulls, list):
-            raise RunnerError("GitHub returned an invalid open pull-request list")
+        pulls = fetch_open_pull_requests(repository, gh_get)
         result = {
             "repository": repository,
             "visibility": "public",
