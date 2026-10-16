@@ -30,7 +30,7 @@ class CapturePublicPortfolioTests(unittest.TestCase):
 
     def test_collects_public_repository_and_open_pr_evidence(self):
         def get_json(url):
-            if url.endswith("/repos/example-org%2Fworld"):
+            if url.endswith("/repos/example-org/world"):
                 return {
                     "full_name": "example-org/world",
                     "private": False,
