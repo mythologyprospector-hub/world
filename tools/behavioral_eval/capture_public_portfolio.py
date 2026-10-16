@@ -61,14 +61,13 @@ def collect_snapshot(
     captured_at = captured_at or datetime.now(timezone.utc).isoformat()
     records = []
     for full_name in repositories:
-        encoded_name = full_name.replace("/", "%2F")
-        repo = get_json(f"{API_ROOT}/repos/{encoded_name}")
+        repo = get_json(f"{API_ROOT}/repos/{full_name}")
         if repo.get("full_name", "").lower() != full_name.lower():
             raise CaptureError(f"GitHub returned an unexpected repository for {full_name}")
         if repo.get("private") is not False:
             raise CaptureError(f"{full_name} is not confirmed public; refusing to capture it")
         pulls = get_json(
-            f"{API_ROOT}/repos/{encoded_name}/pulls?state=open&per_page=100"
+            f"{API_ROOT}/repos/{full_name}/pulls?state=open&per_page=100"
         )
         if not isinstance(pulls, list):
             raise CaptureError(f"GitHub returned an invalid pull-request list for {full_name}")
