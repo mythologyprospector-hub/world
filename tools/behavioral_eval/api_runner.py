@@ -242,6 +242,10 @@ def validate_ranked_item_grounding(trace: dict[str, Any], ledger: list[dict[str,
             payload = entry.get("result")
             repository = entry.get("repository")
             number = payload.get("number") if isinstance(payload, dict) else None
+            if not isinstance(payload, dict) or payload.get("state") != "open":
+                continue
+            if payload.get("is_pull_request") is True and payload.get("merged") is True:
+                continue
             if isinstance(repository, str) and isinstance(number, int) and item_id == f"{repository}#{number}":
                 grounded = True
                 break
