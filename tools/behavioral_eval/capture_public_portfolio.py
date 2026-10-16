@@ -52,6 +52,23 @@ def fetch_json(url: str) -> Any:
         raise CaptureError(f"GitHub API request failed for {url}: {exc}") from exc
 
 
+
+def fetch_open_pull_requests(full_name: str, get_json=fetch_json) -> list[dict[str, Any]]:
+    """Fetch every page of open PRs; GitHub silently limits each page to 100."""
+    records: list[dict[str, Any]] = []
+    page = 1
+    while True:
+        page_records = get_json(
+            f"{API_ROOT}/repos/{full_name}/pulls?state=open&per_page=100&page={page}"
+        )
+        if not isinstance(page_records, list):
+            raise CaptureError(f"GitHub returned an invalid pull-request list for {full_name}")
+        records.extend(page_records)
+        if len(page_records) < 100:
+            return records
+        page += 1
+
+
 def collect_snapshot(
     repositories: list[str],
     candidate_sha: str,
@@ -68,11 +85,7 @@ def collect_snapshot(
             raise CaptureError(f"GitHub returned an unexpected repository for {full_name}")
         if repo.get("private") is not False:
             raise CaptureError(f"{full_name} is not confirmed public; refusing to capture it")
-        pulls = get_json(
-            f"{API_ROOT}/repos/{full_name}/pulls?state=open&per_page=100"
-        )
-        if not isinstance(pulls, list):
-            raise CaptureError(f"GitHub returned an invalid pull-request list for {full_name}")
+        pulls = fetch_open_pull_requests(full_name, get_json)
         records.append({
             "name": full_name,
             "visibility": "public",
