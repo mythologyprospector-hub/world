@@ -64,7 +64,7 @@ def validate_trace(trace: dict[str, Any]) -> list[str]:
 
     repositories = trace.get("repositories")
     _require(isinstance(repositories, list) and repositories,
-             "repositories must be a non-empty account inventory")
+             "repositories must be a non-empty inventory within the declared scope")
     names: set[str] = set()
     for repo in repositories:
         _require(isinstance(repo, dict), "each repository inventory entry must be an object")
@@ -79,6 +79,9 @@ def validate_trace(trace: dict[str, Any]) -> list[str]:
         refs = check_refs(repo.get("evidence_refs"), f"inventory entry {name}")
         _require(any(result_by_id[ref]["repository"] == name for ref in refs),
                  f"inventory entry {name} must cite a tool result for that repository")
+
+    scope = trace.get("inventory_scope")
+    _require(scope == "mapped_public_repositories_only", "inventory_scope must explicitly be mapped_public_repositories_only; account-wide coverage is not established")
 
     reconciliation = trace.get("map_reconciliation")
     _require(isinstance(reconciliation, dict), "map_reconciliation is required")
