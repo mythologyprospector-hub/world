@@ -1,6 +1,8 @@
 name: Behavioral Evaluation Fixture Checks
 
 on:
+  push:
+    branches: ["eval/**"]
   pull_request:
     paths:
       - "tools/behavioral_eval/**"
