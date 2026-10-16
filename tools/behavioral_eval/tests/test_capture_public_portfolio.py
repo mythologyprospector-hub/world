@@ -39,7 +39,7 @@ class CapturePublicPortfolioTests(unittest.TestCase):
                     "pushed_at": "2026-10-15T12:00:00Z",
                     "updated_at": "2026-10-15T12:30:00Z",
                 }
-            if url.endswith("/pulls?state=open&per_page=100&page=1"):
+            if "/pulls?state=open&per_page=100&page=1" in url:
                 return [{
                     "number": 12,
                     "title": "Example change",
