@@ -286,6 +286,10 @@ def validate_source_checks(trace: dict[str, Any], ledger: list[dict[str, Any]]) 
         if not isinstance(item, dict):
             raise RunnerError("Each ranked work item must be an object")
         item_id = item.get("id", "<unknown>")
+        item_match = re.fullmatch(r"([^#]+)#([1-9][0-9]*)", item_id) if isinstance(item_id, str) else None
+        if not item_match:
+            raise RunnerError(f"Ranked item {item_id!r} must identify an exact repository and positive item number")
+        expected_repository, expected_number = item_match.group(1), int(item_match.group(2))
         refs = item.get("evidence_refs")
         checks = item.get("source_checks")
         if not isinstance(refs, list) or not isinstance(checks, list) or not checks:
@@ -305,6 +309,15 @@ def validate_source_checks(trace: dict[str, Any], ledger: list[dict[str, Any]]) 
             payload = entry.get("result")
             if not isinstance(payload, dict):
                 raise RunnerError(f"{item_id}: source check {ref!r} has no source payload")
+            # Every fact used to grade a ranked item must come from that exact item,
+            # not merely from another issue/PR also cited in the trace.
+            if (
+                entry.get("repository") != expected_repository
+                or payload.get("number") != expected_number
+            ):
+                raise RunnerError(
+                    f"{item_id}: source check {ref!r} must refer to the exact ranked item"
+                )
             actual = entry.get("repository") if field == "repository" else payload.get(field)
             expected = check["expected"]
             if type(actual) is not type(expected) or actual != expected:
