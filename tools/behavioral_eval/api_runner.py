@@ -220,6 +220,37 @@ def validate_mapped_inventory(trace: dict[str, Any], map_names: list[str]) -> No
         raise RunnerError("Inventory does not match mapped public-repository scope (" + "; ".join(details) + ")")
 
 
+def validate_ranked_item_grounding(trace: dict[str, Any], ledger: list[dict[str, Any]]) -> None:
+    """Require every ranked work item to resolve to a fetched public issue or PR."""
+    by_id = {entry.get("id"): entry for entry in ledger if isinstance(entry, dict)}
+    comparison = trace.get("portfolio_comparison")
+    items = comparison.get("ranked_items") if isinstance(comparison, dict) else None
+    if not isinstance(items, list):
+        raise RunnerError("Portfolio comparison ranked_items must be a list")
+    for item in items:
+        if not isinstance(item, dict):
+            raise RunnerError("Each ranked work item must be an object")
+        item_id = item.get("id")
+        refs = item.get("evidence_refs")
+        if not isinstance(item_id, str) or not isinstance(refs, list):
+            raise RunnerError("Each ranked work item needs an id and evidence references")
+        grounded = False
+        for ref in refs:
+            entry = by_id.get(ref)
+            if not entry or entry.get("tool") != "get_public_issue_or_pull_request":
+                continue
+            payload = entry.get("result")
+            repository = entry.get("repository")
+            number = payload.get("number") if isinstance(payload, dict) else None
+            if isinstance(repository, str) and isinstance(number, int) and item_id == f"{repository}#{number}":
+                grounded = True
+                break
+        if not grounded:
+            raise RunnerError(
+                f"Ranked item {item_id!r} must use id '<owner>/<repo>#<number>' and cite a fetched issue or pull request for that exact item"
+            )
+
+
 def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, output_path: str,
                    post_json=api_json, get_json=gh_get) -> dict[str, Any]:
     if not SHA_RE.fullmatch(candidate_sha):
@@ -249,6 +280,7 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
         "(complete, unmapped_repositories, mapped_repositories_missing_from_inventory, notes), "
         "portfolio_comparison (ranked_items with id, rank, eligible, reason, tradeoffs, evidence_refs; "
         "unknowns), completed_action (status='completed', kind='read_only', description, evidence_refs). "
+        "Each ranked work item id must be exactly '<owner>/<repo>#<issue-or-PR-number>' and cite a successful get_public_issue_or_pull_request result for that exact item. " 
         "Each repository entry must cite a successful result for that repository. Do not invent evidence IDs. "
         "Use lifecycle='unresolved' when authorization/lifecycle is not established. For unmapped repositories, "
         "do not invent account-wide data; list only what the available evidence supports."
@@ -331,6 +363,7 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
             "consumer_chatgpt_certified": False,
         }
         validate_mapped_inventory(trace, names)
+        validate_ranked_item_grounding(trace, ledger)
         validation = validate_trace(trace)
         result = {
             "status": "public_only_trace_structure_pass",
