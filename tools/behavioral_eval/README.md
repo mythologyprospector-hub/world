@@ -5,6 +5,8 @@ This directory contains the first, deliberately limited piece of the World readi
 ## What it checks
 
 - The trace identifies scenario I and pins the exact candidate commit SHA.
+- The API runner requires each ranked work item to identify an exact fetched public issue or pull request (`owner/repo#number`) and rejects items that are closed or merged.
+- This is identity and lifecycle checking, not proof that the model's explanation or recommendation is semantically correct.
 - The inventory explicitly declares its scope as mapped public repositories only, classifies each listed repository, cites result IDs, and reconciles map entries. It cannot claim account-wide coverage.
 - In the API runner, the returned inventory is cross-checked against the exact repository names parsed from the checked-out map; omitted mapped repositories, extra names, duplicates, and `unmapped` classifications are rejected before trace validation.
 - The portfolio comparison ranks at least two eligible work items, gives reasons and tradeoffs, cites result IDs, and discloses unknowns.
