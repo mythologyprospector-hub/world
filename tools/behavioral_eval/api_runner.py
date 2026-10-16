@@ -192,6 +192,36 @@ def function_calls(response: dict[str, Any]) -> list[dict[str, Any]]:
     return [item for item in response.get("output", []) if item.get("type") == "function_call"]
 
 
+
+def validate_mapped_inventory(trace: dict[str, Any], map_names: list[str]) -> None:
+    """Require the model inventory to cover the exact mapped-public scope."""
+    repositories = trace.get("repositories")
+    if not isinstance(repositories, list):
+        raise RunnerError("Model trace repositories must be a list")
+    observed = []
+    for repo in repositories:
+        if not isinstance(repo, dict) or not isinstance(repo.get("name"), str):
+            raise RunnerError("Every inventory entry must have a repository name")
+        if repo.get("map_status") != "mapped":
+            raise RunnerError(
+                "Mapped-public-only inventory cannot classify entries as unmapped"
+            )
+        observed.append(repo["name"])
+    expected = set(map_names)
+    actual = set(observed)
+    missing = sorted(expected - actual)
+    unexpected = sorted(actual - expected)
+    if missing or unexpected or len(observed) != len(actual):
+        details = []
+        if missing:
+            details.append("missing mapped repositories: " + ", ".join(missing))
+        if unexpected:
+            details.append("repositories outside map: " + ", ".join(unexpected))
+        if len(observed) != len(actual):
+            details.append("duplicate repository names")
+        raise RunnerError("Inventory does not match mapped public-repository scope (" + "; ".join(details) + ")")
+
+
 def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, output_path: str,
                    post_json=api_json, get_json=gh_get) -> dict[str, Any]:
     if not SHA_RE.fullmatch(candidate_sha):
@@ -302,6 +332,7 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
             "private_repositories_queried": False,
             "consumer_chatgpt_certified": False,
         }
+        validate_mapped_inventory(trace, names)
         validation = validate_trace(trace)
         result = {
             "status": "public_only_trace_structure_pass",
