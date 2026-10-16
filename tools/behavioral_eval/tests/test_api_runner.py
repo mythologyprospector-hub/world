@@ -163,5 +163,47 @@ class ApiRunnerTests(unittest.TestCase):
             )
 
 
+    def test_runner_rejects_incomplete_inventory_and_saves_failure_artifact(self):
+        with tempfile.TemporaryDirectory() as d:
+            map_path = Path(d) / "REPOSITORIES.md"
+            map_path.write_text(MAP)
+            out_path = Path(d) / "out.json"
+            incomplete_trace = {
+                "repositories": [{
+                    "name": "mythologyprospector-hub/world",
+                    "map_status": "mapped",
+                }],
+            }
+            responses = [
+                {"id": "resp-tool", "output": [{
+                    "type": "function_call",
+                    "name": "list_mapped_public_repositories",
+                    "arguments": "{}",
+                    "call_id": "call-list",
+                }]},
+                {"id": "resp-final", "output": [{
+                    "type": "message",
+                    "content": [{"type": "output_text", "text": json.dumps(incomplete_trace)}],
+                }]},
+            ]
+
+            def fake_post(url, key, payload):
+                return responses.pop(0)
+
+            with self.assertRaisesRegex(
+                RunnerError,
+                "missing mapped repositories: mythologyprospector-hub/episteme",
+            ):
+                run_evaluation(
+                    SHA, str(map_path), "test-key", "test-model", str(out_path),
+                    post_json=fake_post,
+                )
+
+            saved = json.loads(out_path.read_text())
+            self.assertEqual(saved["status"], "failed")
+            self.assertIn("missing mapped repositories", saved["error"])
+            self.assertEqual(saved["tool_ledger"][0]["tool"], "list_mapped_public_repositories")
+
+
 if __name__ == "__main__":
     unittest.main()
