@@ -68,6 +68,19 @@ Keep durable documentation synchronized with meaningful work.
 
 Prefer the smallest correct, testable, reversible step.
 
+## Completion discipline: evidence before another status update
+
+The arrival protocol is a work loop, not a sequence of progress announcements. Once the assistant has enough evidence to identify a useful next step, it should do that work before ending the turn.
+
+- **Deliver the comparison, not another promise.** Complete the visible-account inventory and an evidence-backed ranking of active/authorized work. For each serious candidate, use current repository evidence to state the problem or opportunity, blockers/dependencies, verification status, and likely benefit. Explain why the recommendation outranks the alternatives. Keep private material private.
+- **Finish one useful, safe step.** After orienting, perform the next action that is possible within established authority. This may be read-only investigation, a focused review, or a practical test. If the work is blocked, identify the exact blocker and complete other feasible parts instead of ending with a general promise to continue.
+- **Test the experience, don't merely inspect its description.** When recommending a playable or user-facing experience test, actually exercise the interaction with available tools. Report what happened, including failure, redirection, hints, and ending as relevant. If the available interface cannot execute the test, state that specific limitation and do not claim the experience passed.
+- **Keep evidence labels precise.** Distinguish inspected, proposed, implemented, tested, verified, and demonstrated. A plan, a plausible design, a passing structural check, or a successful CI run is not evidence for a different claim.
+- **Do not end on routine future tense.** Avoid ending a turn with only "I'll continue the review," "the next step is to test," or another status promise when that work can be done now. A short report should say what was completed, what evidence supports it, what remains blocked or unverified, and the next justified move.
+- **Respect the gate.** This discipline does not authorize merges, downstream implementation while mandatory readiness scenarios remain unverified, or consequential decisions reserved for the owner. Read-only portfolio discovery must continue while the gate is open.
+
+The behavioral acceptance criteria are recorded in [FACTORY_READINESS_TESTS.md](FACTORY_READINESS_TESTS.md), including the survey-to-action completion scenario. The goal is not more narration; it is useful work completed within the available authority and capabilities.
+
 ## Human communication — KEEP IT BRIEF
 
 The human does not code and does not need implementation narration.
@@ -105,7 +118,8 @@ Before selecting downstream build work, first verify that the operating machiner
 3. If a defect could cause a shallow survey, premature implementation, a false completion claim, a boundary violation, or a lost handoff, stop downstream project work and repair the operating instructions first. Keep the repair focused and reviewable.
 4. Check the repair against the original failure mode and the relevant project rules. A written instruction is not proof that an assistant can follow it; use the concrete scenarios in [FACTORY_READINESS_TESTS.md](FACTORY_READINESS_TESTS.md) and record available verification evidence.
 5. Do not declare World and Project Seed ready merely because edits exist or a PR is open. Report what was inspected, what was changed, what was actually tested, and what remains unverified.
-6. The readiness gate is a prerequisite for **downstream implementation**, not a reason to leave the owner without a picture of the world. The read-only account inventory and portfolio survey should proceed as soon as the operating rules and available tools permit, even if some readiness scenarios remain unverified. Report the current landscape, evidence, uncertainty, and best provisional priority; do not begin downstream implementation until the gate is satisfied.
+6. The readiness gate is a prerequisite for **downstream implementation**, not a reason to leave the owner without a picture of the world.
+7. **Never send the owner back to the start.** Receiving the World URL means execute the arrival protocol in this conversation. Do not ask for another fresh chat, another copy of the same link, or another owner-run test. If session independence cannot be established from available evidence, label that one classification UNVERIFIED; do not let it block the account inventory, evidence-backed portfolio comparison, or other permitted work. The evaluator—not the assistant under test—can decide whether the session qualifies as an independent cold start. Report actual work and evidence, not instructions for how the owner should repeat the experiment. The read-only account inventory and portfolio survey should proceed as soon as the operating rules and available tools permit, even if some readiness scenarios remain unverified. Report the current landscape, evidence, uncertainty, and best provisional priority; do not begin downstream implementation until the gate is satisfied.
 
 This gate is a prerequisite, not a recurring excuse to redesign the operating system indefinitely. Reopen it when evidence reveals a material defect or a relevant governing change.
 
@@ -125,3 +139,15 @@ At arrival:
 8. Leave the next fresh session a useful landing point by updating the appropriate existing status or handoff record when needed. Do not create ceremonial daily logs, duplicate sources of truth, or a management application merely to imitate continuity.
 
 Distinguish proposed, in-progress, implemented, tested, verified, and demonstrated work. The initial briefing reflects available evidence; do not imply an exhaustive survey if one was not performed. Label uncertainty and missing access. Self-direction is the default when no specific direction is given, not permission to make consequential value, scope, architecture, governance, dependency, or boundary decisions reserved for the owner.
+
+## Active test-marker protocol
+
+During a live behavioral test, the evaluator may create one open World issue titled `[ACTIVE TEST]` that names the item under test and the required temporary exclusion. At launch, inspect open World issues for this marker. If one exists:
+
+1. Honor its narrow exclusion: do not recommend, edit, merge, or spend the launch response re-litigating the named item under test.
+2. Continue the ordinary account-wide inventory and portfolio comparison. The marker is not a reason to stop at a test briefing or skip useful work.
+3. Recommend the best next eligible work item outside the exclusion, grounded in current repository state, project canon, and verification evidence. State the next safe action.
+4. The marker changes only the test focus. It does not override readiness gates, authorization, privacy rules, or the human approval boundary.
+5. Do not create another marker for the same run. The evaluator closes the marker after reviewing the returned fresh-session response and records the result in existing issue #16.
+
+A marker is a temporary evaluation constraint, not evidence that the candidate passed. Keep the candidate response focused on doing the job under the constraint, not narrating that it is being tested.

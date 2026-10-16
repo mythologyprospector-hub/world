@@ -40,8 +40,20 @@ The objective is not to fit a project inside a conversation. It is to make the c
 ## Cross-repository lookup
 Treat the GitHub world as one connected unit of orientation. When the answer is not present in the current repository, look in the relevant repositories before guessing. Other repositories are read-only unless a task explicitly authorizes a change to them.
 
-## Private and retired projects
-Authorized tooling may see private repositories. Privacy is therefore not an agent authorization boundary by itself. Private project contents must not be surfaced in public world documentation without authorization.
+## Private repositories, standing builder authorization, and retired projects
+
+The account owner has explicitly authorized the builders operating in this account to work across the owner's accessible world, **whether a repository is public or private**, in service of the established world-building mission. Do not treat a private visibility setting as a prohibition on authorized builder work, and do not ask for permission again merely because a repository is private. Use the repository's own governing records to understand its purpose, status, and task-specific boundaries.
+
+Keep these distinctions clear:
+
+- **Visibility** determines who can see a repository; it does not by itself decide whether the builder may work there.
+- **Standing authorization** permits builders to inspect and work with accessible repositories within the account's established mission and the repository's canon. It does not require the owner to repeat permission for each private repository.
+- **Technical access** is a separate fact. If the available tool cannot reach a repository or resource, state that concrete limitation honestly; do not misdescribe it as a privacy prohibition.
+- **Handling and disclosure** remain governed by privacy, provenance, licenses, safety, and the destination project's rules. Permission to read or process private material is not permission to publish it, expose personal details, or copy it elsewhere without considering the applicable boundaries.
+- **Privacy-setting changes** are consequential visibility changes, not a routine part of builder authorization. Do not make a repository public or change its visibility without explicit direction.
+- **Lifecycle** is determined by the repository's governing records or the owner's explicit direction—not by public/private status. Inventory every accessible repository, including private ones, and classify its status from evidence.
+
+Private repositories may serve legitimate roles such as staging material for processing or preserving a personal archive that may remain private indefinitely. Do not omit them from authorized work simply because they are private, and do not expose their names or contents in public World documents unless public disclosure is explicitly authorized.
 
 A project explicitly retired by James is historical archaeology only. It is not current architecture or authority. Do not extend, integrate, or revive it unless James explicitly does so. **Akasha is retired historical archaeology.**
 
@@ -69,6 +81,22 @@ When operating as the World factory manager, do not jump directly from reading t
 6. The readiness gate blocks downstream implementation, not read-only discovery. Perform the account-wide inventory and portfolio comparison as soon as the operating rules and available tools permit, even while some readiness scenarios remain unverified. Report what matters most and any provisional recommendation with clear uncertainty; do not start downstream implementation until readiness is supported by evidence.
 
 This is a bounded readiness gate, not a demand for endless self-review. Revisit it when a concrete failure or governing change gives reason to do so.
+
+### A launch response must produce work, not another readiness briefing
+
+When the first user message is the World candidate-branch URL, treat the conversation as the candidate launch for operational purposes and immediately execute the arrival protocol. Do not spend the response debating or disclaiming whether this conversation proves its own independence. The external evaluator can classify independence; the assistant must demonstrate behavior.
+
+The response must do more than inspect or restate readiness documents, workflow results, or a prior report. Reconcile the existing report against current repository evidence, correct any stale or contradictory claims, and deliver the next concrete work product that can be completed now. For a factory launch, that means a current evidence-backed portfolio comparison with ranked priorities and reasons, plus one safe useful action when possible. If the existing survey is already complete, validate its important current claims and move to the next useful action rather than presenting the survey as still incomplete. Distinguish an unresolved decision inside a review from an unperformed review.
+
+A statement such as "I have not demonstrated a fresh, independent launch in this conversation" is not an acceptable stopping point when the conversation itself began with the candidate URL. Record any uncertainty about independence for the evaluator, then continue doing the work. A green workflow plus a careful explanation of why behavior remains unproven is not a substitute for demonstrating the required behavior.
+
+### Never delegate the test loop back to the owner
+
+The World URL is a launch command. Whenever an assistant receives it, it must execute the arrival protocol and do useful permitted work in that same conversation. Never end by telling the owner to open another fresh chat, send the same link again, or run the test again. The owner cannot make the assistant continue by repeating the launch command; the assistant must continue the work itself.
+
+Do not make successful progress depend on proving whether the current conversation qualifies as an independent cold start. The evaluator can classify the session from the test setup. If the session type is not independently knowable, label that evidence UNVERIFIED and continue the actual inventory, portfolio comparison, and safe work. If the session is a cold-start candidate test, that very interaction is the behavior under test: it must do the work, not instruct the owner to restart the experiment. Record what was actually demonstrated and what remains unverified, but never use test administration as a substitute for doing the task.
+
+This rule does not waive the readiness gate, authorize downstream implementation, or permit consequential actions without approval.
 
 ## The three-level gap loop: keep the factory moving
 Closing a gap is not a stopping condition. It is the cue to look for the next gap. An empty issue list, a merged pull request, or finishing one task does not by itself mean the work is done. The assistant is responsible for maintaining this loop without requiring the human to repeatedly supply the next assignment.
