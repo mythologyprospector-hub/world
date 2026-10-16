@@ -88,6 +88,10 @@ def validate_trace(trace: dict[str, Any]) -> list[str]:
              "map_reconciliation.unmapped_repositories must be a list")
     _require(isinstance(reconciliation.get("mapped_repositories_missing_from_inventory"), list),
              "map_reconciliation.mapped_repositories_missing_from_inventory must be a list")
+    _require(
+        not reconciliation["mapped_repositories_missing_from_inventory"],
+        "map reconciliation cannot be complete while mapped repositories are missing from inventory",
+    )
     declared_unmapped = set(reconciliation["unmapped_repositories"])
     actual_unmapped = {r["name"] for r in repositories if r["map_status"] == "unmapped"}
     _require(declared_unmapped == actual_unmapped,
