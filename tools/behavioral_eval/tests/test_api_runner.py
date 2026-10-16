@@ -37,6 +37,16 @@ class ApiRunnerTests(unittest.TestCase):
         self.assertEqual(len(function_calls(response)), 1)
         self.assertEqual(output_text(response), "done")
 
+    def test_bounded_tool_payload_remains_valid_json_when_truncated(self):
+        from tools.behavioral_eval.api_runner import bounded_tool_payload, MAX_TOOL_OUTPUT_CHARS
+
+        payload = bounded_tool_payload("e001", {"body": "x" * (MAX_TOOL_OUTPUT_CHARS * 3)})
+        decoded = json.loads(payload)
+        self.assertEqual(decoded["evidence_id"], "e001")
+        self.assertTrue(decoded["truncated"])
+        self.assertLessEqual(len(payload), MAX_TOOL_OUTPUT_CHARS)
+        self.assertIn("full result is preserved", decoded["note"])
+
     def test_successful_mock_run_writes_failure_safe_public_scope_trace(self):
         with tempfile.TemporaryDirectory() as d:
             map_path = Path(d) / "REPOSITORIES.md"
