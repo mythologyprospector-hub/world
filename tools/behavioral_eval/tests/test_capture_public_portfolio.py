@@ -4,6 +4,7 @@ from unittest.mock import Mock
 from tools.behavioral_eval.capture_public_portfolio import (
     CaptureError,
     collect_snapshot,
+    fetch_open_pull_requests,
     mapped_repositories,
 )
 
@@ -38,7 +39,7 @@ class CapturePublicPortfolioTests(unittest.TestCase):
                     "pushed_at": "2026-10-15T12:00:00Z",
                     "updated_at": "2026-10-15T12:30:00Z",
                 }
-            if url.endswith("/pulls?state=open&per_page=100"):
+            if url.endswith("/pulls?state=open&per_page=100&page=1"):
                 return [{
                     "number": 12,
                     "title": "Example change",
@@ -58,6 +59,23 @@ class CapturePublicPortfolioTests(unittest.TestCase):
         self.assertFalse(snapshot["coverage"]["private_repositories_queried"])
         self.assertEqual(snapshot["repositories"][0]["open_pull_request_count"], 1)
         self.assertEqual(snapshot["repositories"][0]["open_pull_requests"][0]["number"], 12)
+
+
+    def test_fetches_all_pages_of_open_pull_requests(self):
+        requested = []
+
+        def get_json(url):
+            requested.append(url)
+            if url.endswith("per_page=100&page=1"):
+                return [{"number": n} for n in range(1, 101)]
+            if url.endswith("per_page=100&page=2"):
+                return [{"number": 101}]
+            raise AssertionError(f"unexpected API URL: {url}")
+
+        pulls = fetch_open_pull_requests("example-org/world", get_json)
+        self.assertEqual(len(pulls), 101)
+        self.assertEqual(pulls[-1]["number"], 101)
+        self.assertEqual(len(requested), 2)
 
     def test_refuses_private_repository(self):
         def get_json(url):
