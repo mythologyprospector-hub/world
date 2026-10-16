@@ -190,6 +190,7 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
     call_count = 0
     trace = None
     failure = None
+    last_model_text = None
     started = datetime.now(timezone.utc).isoformat()
     prompt = (
         "Run World Factory scenario I as an evidence-driven read-only evaluator. "
@@ -229,6 +230,7 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
             calls = function_calls(response)
             if not calls:
                 text = output_text(response)
+                last_model_text = text
                 try:
                     trace = json.loads(text)
                 except json.JSONDecodeError as exc:
@@ -286,10 +288,11 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
         }
         validation = validate_trace(trace)
         result = {
-            "status": "trace_structure_pass",
+            "status": "public_only_trace_structure_pass",
             "candidate_sha": candidate_sha,
             "model": model,
             "report": trace,
+            "model_response_text": last_model_text,
             "tool_ledger": ledger,
             "validation_notes": validation,
             "limitations": [
@@ -307,6 +310,7 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
             "started_at": started,
             "failed_at": datetime.now(timezone.utc).isoformat(),
             "error": failure,
+            "model_response_text": last_model_text,
             "tool_ledger": ledger,
             "limitations": [
                 "Failure is not a readiness pass.",
