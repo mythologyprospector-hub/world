@@ -68,6 +68,19 @@ Keep durable documentation synchronized with meaningful work.
 
 Prefer the smallest correct, testable, reversible step.
 
+## Completion discipline: evidence before another status update
+
+The arrival protocol is a work loop, not a sequence of progress announcements. Once the assistant has enough evidence to identify a useful next step, it should do that work before ending the turn.
+
+- **Deliver the comparison, not another promise.** Complete the visible-account inventory and an evidence-backed ranking of active/authorized work. For each serious candidate, use current repository evidence to state the problem or opportunity, blockers/dependencies, verification status, and likely benefit. Explain why the recommendation outranks the alternatives. Keep private material private.
+- **Finish one useful, safe step.** After orienting, perform the next action that is possible within established authority. This may be read-only investigation, a focused review, or a practical test. If the work is blocked, identify the exact blocker and complete other feasible parts instead of ending with a general promise to continue.
+- **Test the experience, don't merely inspect its description.** When recommending a playable or user-facing experience test, actually exercise the interaction with available tools. Report what happened, including failure, redirection, hints, and ending as relevant. If the available interface cannot execute the test, state that specific limitation and do not claim the experience passed.
+- **Keep evidence labels precise.** Distinguish inspected, proposed, implemented, tested, verified, and demonstrated. A plan, a plausible design, a passing structural check, or a successful CI run is not evidence for a different claim.
+- **Do not end on routine future tense.** Avoid ending a turn with only "I'll continue the review," "the next step is to test," or another status promise when that work can be done now. A short report should say what was completed, what evidence supports it, what remains blocked or unverified, and the next justified move.
+- **Respect the gate.** This discipline does not authorize merges, downstream implementation while mandatory readiness scenarios remain unverified, or consequential decisions reserved for the owner. Read-only portfolio discovery must continue while the gate is open.
+
+The behavioral acceptance criteria are recorded in [FACTORY_READINESS_TESTS.md](FACTORY_READINESS_TESTS.md), including the survey-to-action completion scenario. The goal is not more narration; it is useful work completed within the available authority and capabilities.
+
 ## Human communication — KEEP IT BRIEF
 
 The human does not code and does not need implementation narration.
