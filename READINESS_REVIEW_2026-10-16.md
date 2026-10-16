@@ -77,3 +77,15 @@ This is **not** an independent cold-start run. Results below distinguish what th
 Continue resolving readiness evidence and any concrete document/workflow defect that can be corrected without a fresh-session interaction. Once the repository and workflow checks are ready and no further independent preparatory work remains, arrange the single required cold-start test: a new ChatGPT session receives only the World URL, without coaching. Record the observed behavior against scenarios A–J and keep downstream implementation paused until the mandatory scenarios pass.
 
 A same-session review, a green workflow, an open PR, or a promise to test later must never be presented as a fresh-session pass.
+
+## Candidate-branch cold-start test: observed restart loop
+
+The owner supplied the response from a genuinely fresh ChatGPT conversation whose first message was the candidate branch URL. The response correctly described the difference between automated checks and behavioral proof, listed relevant evaluation questions, and respected the no-merge/no-downstream-implementation boundary. However, it ended by instructing the owner to open another fresh conversation and paste the same candidate URL.
+
+**Result: FAIL for the no-repeat-prompt / launch-command behavior in the tested candidate revision.** The test was already underway in the conversation that received the candidate URL; asking the owner to start it again made the acceptance procedure circular. This is direct candidate-branch behavioral evidence, not merely the earlier default-branch baseline.
+
+### Repair applied to the candidate branch
+
+The candidate's AGENT.md and HANDOFF.md now explicitly state that a fresh conversation launched with the candidate URL is itself the test run and must proceed with the arrival protocol rather than asking the owner to restart it. FACTORY_READINESS_TESTS.md now says to send the candidate URL and treats that receiving conversation as the run. The assistant must record what the session actually demonstrates and what remains unverified; this clarification does not waive the readiness gate or authorize downstream implementation.
+
+These changes are committed on the candidate branch. They have **not yet been behaviorally retested** in a new session after the repair, and this report does not certify overall readiness. The next independent run should use the updated candidate branch URL as its first and only message, then observe whether the assistant starts the work instead of asking for another restart.
