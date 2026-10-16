@@ -321,5 +321,51 @@ class ApiRunnerTests(unittest.TestCase):
             self.assertEqual(saved["tool_ledger"][0]["tool"], "list_mapped_public_repositories")
 
 
+
+    def test_issue_lookup_refuses_private_repository_before_fetching_issue(self):
+        from unittest.mock import patch
+
+        repository = "mythologyprospector-hub/world"
+        base = "https://api.github.com/repos/mythologyprospector-hub/world"
+        calls = []
+
+        def fake_get(url):
+            calls.append(url)
+            return {"full_name": repository, "private": True}
+
+        with patch("tools.behavioral_eval.api_runner.gh_get", side_effect=fake_get):
+            with self.assertRaisesRegex(RunnerError, "not confirmed public"):
+                run_tool(
+                    "get_public_issue_or_pull_request",
+                    {"repository": repository, "number": 41},
+                    {repository},
+                    [repository],
+                )
+
+        self.assertEqual(calls, [base])
+
+    def test_issue_lookup_refuses_unexpected_repository_identity(self):
+        from unittest.mock import patch
+
+        repository = "mythologyprospector-hub/world"
+        base = "https://api.github.com/repos/mythologyprospector-hub/world"
+        calls = []
+
+        def fake_get(url):
+            calls.append(url)
+            return {"full_name": "someone-else/world", "private": False}
+
+        with patch("tools.behavioral_eval.api_runner.gh_get", side_effect=fake_get):
+            with self.assertRaisesRegex(RunnerError, "not confirmed public"):
+                run_tool(
+                    "get_public_issue_or_pull_request",
+                    {"repository": repository, "number": 41},
+                    {repository},
+                    [repository],
+                )
+
+        self.assertEqual(calls, [base])
+
+
 if __name__ == "__main__":
     unittest.main()
