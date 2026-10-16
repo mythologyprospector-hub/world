@@ -135,9 +135,12 @@ class ApiRunnerTests(unittest.TestCase):
                 return responses.pop(0)
 
             def fake_gh_get(url):
+                base = "https://api.github.com/repos/mythologyprospector-hub/world"
+                if url == base:
+                    return {"full_name": "mythologyprospector-hub/world", "private": False}
                 number = int(url.rsplit("/", 1)[1])
                 return {
-                    "repository_url": "https://api.github.com/repos/mythologyprospector-hub/world",
+                    "repository_url": base,
                     "number": number,
                     "title": f"Example issue {number}",
                     "state": "open",
