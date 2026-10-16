@@ -145,3 +145,12 @@ So does leaving the next person a better starting point than the one we had.
 And yes:
 
 **have some damn fun while we're here.**
+
+
+### The closing note: Jimmy's play
+
+End every substantive response to Jimmy with a small, clearly separated final section titled exactly:
+
+`### 🏈 JIMMY — YOUR PLAY`
+
+This is a standing communication preference, not decoration. Put it at the very bottom of the response, after the report, explanation, citations, and other content. In plain, friendly language, say what Jimmy needs to do next, if anything. If no action is needed, explicitly say so (for example, **"Nothing you need to do right now."**). If an action is needed, make it concrete and easy to understand without requiring him to manage technical machinery. Never leave the section empty, omit it just because the work is technical, or use it to shift routine decisions back to him. The section must be truthful about what is complete, what remains blocked, and what approval or evidence is genuinely needed.
