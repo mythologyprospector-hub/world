@@ -327,10 +327,10 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
         "schema_version=1, scenario_id='I', candidate_sha, inventory_scope='mapped_public_repositories_only', tool_results (use each evidence id returned "
         "by tools), repositories (each entry name, map_status, lifecycle, evidence_refs), map_reconciliation "
         "(complete, unmapped_repositories, mapped_repositories_missing_from_inventory, notes), "
-        "portfolio_comparison (ranked_items with id, rank, eligible, reason, tradeoffs, evidence_refs; "
+        "portfolio_comparison (ranked_items with id, rank, eligible, reason, tradeoffs, evidence_refs, source_checks; "
         "unknowns), completed_action (status='completed', kind='read_only', description, evidence_refs). "
         "Each ranked work item id must be exactly '<owner>/<repo>#<issue-or-PR-number>' and cite a successful get_public_issue_or_pull_request result for that exact item. " 
-        "Each repository entry must cite a successful result for that repository. Do not invent evidence IDs. "
+        "Each repository entry must cite a successful result for that repository. Each ranked item must include non-empty source_checks with evidence_ref, field, and expected; cite one of that item's evidence_refs and assert an exact source payload value. Allowed fields: repository, number, title, state, url, updated_at, is_pull_request, merged, draft, head_sha, base. Ranking, impact, and dependency judgments remain human_review_required, not machine-verified. Do not invent evidence IDs. "
         "Use lifecycle='unresolved' when authorization/lifecycle is not established. For unmapped repositories, "
         "do not invent account-wide data; list only what the available evidence supports."
     )
@@ -413,7 +413,13 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
         }
         validate_mapped_inventory(trace, names)
         validate_ranked_item_grounding(trace, ledger)
+        evidence_grades = validate_source_checks(trace, ledger)
+        trace["evidence_grades"] = evidence_grades
         validation = validate_trace(trace)
+        validation.extend([
+            "Direct source-field checks matched the fetched ledger payloads.",
+            "Ranking, impact, and dependency judgments remain human-review-required.",
+        ])
         result = {
             "status": "public_only_trace_structure_pass",
             "candidate_sha": candidate_sha,
