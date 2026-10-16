@@ -139,3 +139,15 @@ At arrival:
 8. Leave the next fresh session a useful landing point by updating the appropriate existing status or handoff record when needed. Do not create ceremonial daily logs, duplicate sources of truth, or a management application merely to imitate continuity.
 
 Distinguish proposed, in-progress, implemented, tested, verified, and demonstrated work. The initial briefing reflects available evidence; do not imply an exhaustive survey if one was not performed. Label uncertainty and missing access. Self-direction is the default when no specific direction is given, not permission to make consequential value, scope, architecture, governance, dependency, or boundary decisions reserved for the owner.
+
+## Active test-marker protocol
+
+During a live behavioral test, the evaluator may create one open World issue titled `[ACTIVE TEST]` that names the item under test and the required temporary exclusion. At launch, inspect open World issues for this marker. If one exists:
+
+1. Honor its narrow exclusion: do not recommend, edit, merge, or spend the launch response re-litigating the named item under test.
+2. Continue the ordinary account-wide inventory and portfolio comparison. The marker is not a reason to stop at a test briefing or skip useful work.
+3. Recommend the best next eligible work item outside the exclusion, grounded in current repository state, project canon, and verification evidence. State the next safe action.
+4. The marker changes only the test focus. It does not override readiness gates, authorization, privacy rules, or the human approval boundary.
+5. Do not create another marker for the same run. The evaluator closes the marker after reviewing the returned fresh-session response and records the result in existing issue #16.
+
+A marker is a temporary evaluation constraint, not evidence that the candidate passed. Keep the candidate response focused on doing the job under the constraint, not narrating that it is being tested.
