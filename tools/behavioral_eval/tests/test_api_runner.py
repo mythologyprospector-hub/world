@@ -63,5 +63,76 @@ class ApiRunnerTests(unittest.TestCase):
             self.assertEqual(saved["model_response_text"], "not json")
 
 
+    def test_successful_mock_tool_round_trip_validates_and_writes_trace(self):
+        with tempfile.TemporaryDirectory() as d:
+            map_path = Path(d) / "REPOSITORIES.md"
+            map_path.write_text("# Public map\n| Repository | Description |\n| **world** | coordination |\n")
+            out_path = Path(d) / "out.json"
+            trace = {
+                "schema_version": 1,
+                "scenario_id": "I",
+                "candidate_sha": SHA,
+                "inventory_scope": "mapped_public_repositories_only",
+                "repositories": [{
+                    "name": "mythologyprospector-hub/world",
+                    "map_status": "mapped",
+                    "lifecycle": "unresolved",
+                    "evidence_refs": ["e001"],
+                }],
+                "map_reconciliation": {
+                    "complete": True,
+                    "unmapped_repositories": [],
+                    "mapped_repositories_missing_from_inventory": [],
+                    "notes": "The single-entry fixture map reconciles to the single inventoried repository.",
+                },
+                "portfolio_comparison": {
+                    "ranked_items": [
+                        {"id": "work-a", "rank": 1, "eligible": True, "reason": "Higher verified impact.",
+                         "tradeoffs": "Requires follow-up.", "evidence_refs": ["e001"]},
+                        {"id": "work-b", "rank": 2, "eligible": True, "reason": "Useful but less urgent.",
+                         "tradeoffs": "Delays a smaller benefit.", "evidence_refs": ["e001"]},
+                    ],
+                    "unknowns": ["The mock evidence does not establish semantic truth."],
+                },
+                "completed_action": {
+                    "status": "completed",
+                    "kind": "read_only",
+                    "description": "Listed the mapped public repository.",
+                    "evidence_refs": ["e001"],
+                },
+            }
+            responses = [
+                {"id": "resp-tool", "output": [{
+                    "type": "function_call",
+                    "name": "list_mapped_public_repositories",
+                    "arguments": "{}",
+                    "call_id": "call-list",
+                }]},
+                {"id": "resp-final", "output": [{
+                    "type": "message",
+                    "content": [{"type": "output_text", "text": json.dumps(trace)}],
+                }]},
+            ]
+            sent_payloads = []
+
+            def fake_post(url, key, payload):
+                sent_payloads.append(payload)
+                return responses.pop(0)
+
+            result = run_evaluation(
+                SHA, str(map_path), "test-key", "test-model", str(out_path),
+                post_json=fake_post,
+            )
+            saved = json.loads(out_path.read_text())
+            self.assertEqual(result["status"], "public_only_trace_structure_pass")
+            self.assertEqual(saved["status"], "public_only_trace_structure_pass")
+            self.assertEqual(saved["report"]["inventory_scope"], "mapped_public_repositories_only")
+            self.assertEqual(saved["tool_ledger"][0]["id"], "e001")
+            self.assertEqual(saved["tool_ledger"][0]["read_only"], True)
+            self.assertEqual(result["report"]["runner_metadata"]["tool_call_count"], 1)
+            self.assertEqual(sent_payloads[1]["previous_response_id"], "resp-tool")
+            self.assertEqual(result["validation_notes"][0].startswith("Validated scenario I"), True)
+
+
 if __name__ == "__main__":
     unittest.main()
