@@ -39,3 +39,12 @@ python tools/behavioral_eval/capture_public_portfolio.py --candidate-sha <40-cha
 ```
 
 The collector is read-only and refuses any repository not confirmed public. It deliberately does **not** inventory every repository visible to an account, query private repositories, establish private-repository lifecycle or authorization, run an assistant/model, or prove that an assistant used the collected evidence correctly. A successful capture is a public evidence snapshot, not a readiness pass.
+
+
+## Opt-in API-runner prototype
+
+`api_runner.py` is an experimental Responses API runner with three read-only public GitHub functions and a hard cap of 16 tool calls. It refuses repositories outside the checked-out public map, records a structured tool ledger, and writes an artifact for success or failure. It has no shell or repository-write tools.
+
+The manual-only workflow `.github/workflows/behavioral-eval-api.yml` requires an explicit confirmation string, a full candidate SHA, an `OPENAI_API_KEY` Actions secret, and a `WORLD_EVAL_MODEL` Actions variable. It does not run on pull requests or ordinary pushes. No API secret is assumed to exist; a missing secret or model setting fails closed.
+
+**Important:** this runner is only a public-portfolio prototype. It cannot establish account-wide inventory completeness, inspect private repositories, or certify consumer ChatGPT. Its trace validator checks structure and reference integrity, not semantic truth. A successful run is evidence for review, not a readiness pass. A live run may incur API charges.
