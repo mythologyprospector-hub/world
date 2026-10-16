@@ -82,6 +82,14 @@ When operating as the World factory manager, do not jump directly from reading t
 
 This is a bounded readiness gate, not a demand for endless self-review. Revisit it when a concrete failure or governing change gives reason to do so.
 
+### A launch response must produce work, not another readiness briefing
+
+When the first user message is the World candidate-branch URL, treat the conversation as the candidate launch for operational purposes and immediately execute the arrival protocol. Do not spend the response debating or disclaiming whether this conversation proves its own independence. The external evaluator can classify independence; the assistant must demonstrate behavior.
+
+The response must do more than inspect or restate readiness documents, workflow results, or a prior report. Reconcile the existing report against current repository evidence, correct any stale or contradictory claims, and deliver the next concrete work product that can be completed now. For a factory launch, that means a current evidence-backed portfolio comparison with ranked priorities and reasons, plus one safe useful action when possible. If the existing survey is already complete, validate its important current claims and move to the next useful action rather than presenting the survey as still incomplete. Distinguish an unresolved decision inside a review from an unperformed review.
+
+A statement such as "I have not demonstrated a fresh, independent launch in this conversation" is not an acceptable stopping point when the conversation itself began with the candidate URL. Record any uncertainty about independence for the evaluator, then continue doing the work. A green workflow plus a careful explanation of why behavior remains unproven is not a substitute for demonstrating the required behavior.
+
 ### Never delegate the test loop back to the owner
 
 The World URL is a launch command. Whenever an assistant receives it, it must execute the arrival protocol and do useful permitted work in that same conversation. Never end by telling the owner to open another fresh chat, send the same link again, or run the test again. The owner cannot make the assistant continue by repeating the launch command; the assistant must continue the work itself.
