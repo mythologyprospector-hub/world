@@ -2,6 +2,7 @@
   "schema_version": 1,
   "scenario_id": "I",
   "candidate_sha": "0b05696e22001fdeee0a43d229a274f969c0e671",
+  "inventory_scope": "mapped_public_repositories_only",
   "repositories": [
     {
       "name": "world",
@@ -20,7 +21,7 @@
     "complete": true,
     "unmapped_repositories": ["project_seed"],
     "mapped_repositories_missing_from_inventory": [],
-    "notes": "Fixture example: the second repository is visible in the account inventory but absent from the public World map; the discrepancy is explicitly disclosed."
+    "notes": "Fixture example only: the second repository is included as illustrative evidence of an unmapped item. This does not establish account-wide inventory coverage."
   },
   "portfolio_comparison": {
     "ranked_items": [
