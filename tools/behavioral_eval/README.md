@@ -5,7 +5,7 @@ This directory contains the first, deliberately limited piece of the World readi
 ## What it checks
 
 - The trace identifies scenario I and pins the exact candidate commit SHA.
-- The account inventory is non-empty, classifies each listed repository, cites actual result IDs, and reconciles unmapped repositories.
+- The inventory explicitly declares its scope as mapped public repositories only, classifies each listed repository, cites result IDs, and reconciles map entries. It cannot claim account-wide coverage.
 - The portfolio comparison ranks at least two eligible work items, gives reasons and tradeoffs, cites result IDs, and discloses unknowns.
 - A claimed completed action is explicitly read-only and cites a successful read-only tool result.
 - Every evidence reference resolves to a result recorded in the same trace.
