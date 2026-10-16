@@ -89,3 +89,20 @@ The owner supplied the response from a genuinely fresh ChatGPT conversation whos
 The candidate's AGENT.md and HANDOFF.md now explicitly state that a fresh conversation launched with the candidate URL is itself the test run and must proceed with the arrival protocol rather than asking the owner to restart it. FACTORY_READINESS_TESTS.md now says to send the candidate URL and treats that receiving conversation as the run. The assistant must record what the session actually demonstrates and what remains unverified; this clarification does not waive the readiness gate or authorize downstream implementation.
 
 These changes are committed on the candidate branch. They have **not yet been behaviorally retested** in a new session after the repair, and this report does not certify overall readiness. The next independent run should use the updated candidate branch URL as its first and only message, then observe whether the assistant starts the work instead of asking for another restart.
+
+## Follow-up observation: restart loop persisted after first repair
+
+The owner returned another fresh-builder response after the first repair. This response inspected the candidate readiness review, acceptance tests, and README; correctly stated that the earlier observed failure was a restart loop; and accurately distinguished inspection from a behavioral pass. It then again told the owner to open a fresh conversation and send the same candidate URL.
+
+**Result: FAIL — repeated owner-facing test loop.** The first repair said the current candidate conversation was itself the test, but the assistant still tried to transfer test administration back to the owner by questioning whether the current conversation qualified as independent. This shows the earlier wording did not sufficiently separate the builder's duty to do the work from the evaluator's duty to classify the session.
+
+### Second repair applied
+
+The candidate instructions now say:
+- The World URL is a launch command; execute the arrival protocol in the current conversation.
+- Never ask the owner to restart the chat, repeat the link, or run the same test again.
+- The evaluator—not the assistant under test—classifies session independence.
+- If session independence cannot be established, label that classification UNVERIFIED and continue the actual inventory, portfolio comparison, and permitted work.
+- Test administration must not replace useful work.
+
+This second repair is committed on the candidate branch. Automated workflow and a further independent behavioral run remain to be checked. The candidate is not certified; downstream implementation remains gated.
