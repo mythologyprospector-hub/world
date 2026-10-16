@@ -106,3 +106,26 @@ The candidate instructions now say:
 - Test administration must not replace useful work.
 
 This second repair is committed on the candidate branch. Automated workflow and a further independent behavioral run remain to be checked. The candidate is not certified; downstream implementation remains gated.
+
+
+## Third candidate-branch observation: progress report substituted for execution
+
+The owner supplied another response from a conversation launched with the candidate URL after the second repair and successful automated workflow run #36. This response no longer directly instructed the owner to open another chat. It correctly reported the green workflow and summarized the portfolio priorities, but it again centered the response on the readiness test rather than completing the required launch behavior.
+
+Observed issues:
+- It said the wider repository survey and private-project lifecycle review "remain incomplete," although this review already records a provisional nine-repository inventory and portfolio comparison. The documented unresolved item is one private project's lifecycle classification—not that the entire review was never performed.
+- It repeated the priorities from the existing report instead of validating them against current repository evidence or producing the next concrete deliverable.
+- It ended by saying a fresh, independent post-repair launch had not been demonstrated "in this conversation." That transfers session classification back to the assistant under test, despite the rule that the evaluator classifies independence, and treats the current launch as insufficient rather than doing the work.
+
+**Result: FAIL — the restart loop evolved into a readiness-briefing loop.** This is a meaningful improvement over explicitly asking for another chat, but it still does not satisfy survey-to-action completion. The assistant has learned to describe the repair and its test conditions without fully following through.
+
+### Third repair applied
+
+`AGENT.md` now explicitly requires a candidate-URL launch response to:
+- Treat the receiving conversation as the candidate launch for operational purposes, leaving independence classification to the evaluator.
+- Reconcile prior reports with current repository evidence and correct stale or contradictory claims.
+- Deliver a current evidence-backed portfolio comparison and one safe useful action when possible, rather than merely restating readiness status.
+- Distinguish an unperformed review from a completed review containing one unresolved decision.
+- Never use a disclaimer about the current session's independence as a stopping point.
+
+The third repair is committed on the candidate branch. The latest observed behavior remains a failure; this instruction change is not itself a behavioral pass. Automated checks must be checked for the new head, and a future behavior run must show actual work rather than another briefing.
