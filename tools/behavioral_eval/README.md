@@ -26,3 +26,16 @@ python tools/behavioral_eval/validate_trace.py tools/behavioral_eval/fixtures/sc
 ```
 
 The test suite includes a complete fixture and negative cases for missing evidence, incomplete comparisons, non-read-only action evidence, incomplete map reconciliation, and an unpinned candidate SHA.
+
+
+## Live public evidence capture
+
+The workflow also runs `capture_public_portfolio.py` against the checked-out `REPOSITORIES.md`. It queries GitHub's public API for each mapped repository, captures repository metadata and open pull requests, pins the candidate commit SHA, and uploads `public-portfolio-evidence.json` as a 14-day workflow artifact.
+
+Run it locally from the repository root with a full commit SHA:
+
+```bash
+python tools/behavioral_eval/capture_public_portfolio.py --candidate-sha <40-character-commit-sha>
+```
+
+The collector is read-only and refuses any repository not confirmed public. It deliberately does **not** inventory every repository visible to an account, query private repositories, establish private-repository lifecycle or authorization, run an assistant/model, or prove that an assistant used the collected evidence correctly. A successful capture is a public evidence snapshot, not a readiness pass.
