@@ -18,7 +18,12 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-try:\n    from .capture_public_portfolio import API_ROOT, CaptureError, fetch_json, mapped_repositories\n    from .validate_trace import TraceError, validate_trace\nexcept ImportError:  # direct script execution from this directory\n    from capture_public_portfolio import API_ROOT, CaptureError, fetch_json, mapped_repositories\n    from validate_trace import TraceError, validate_trace
+try:
+    from .capture_public_portfolio import API_ROOT, CaptureError, fetch_json, mapped_repositories
+    from .validate_trace import TraceError, validate_trace
+except ImportError:  # direct script execution from this directory
+    from capture_public_portfolio import API_ROOT, CaptureError, fetch_json, mapped_repositories
+    from validate_trace import TraceError, validate_trace
 
 RESPONSES_URL = "https://api.openai.com/v1/responses"
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
