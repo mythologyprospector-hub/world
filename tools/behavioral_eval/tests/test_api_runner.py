@@ -10,6 +10,7 @@ from tools.behavioral_eval.api_runner import (
     run_evaluation,
     run_tool,
     validate_mapped_inventory,
+    validate_ranked_item_grounding,
 )
 
 SHA = "a" * 40
@@ -88,9 +89,9 @@ class ApiRunnerTests(unittest.TestCase):
                 },
                 "portfolio_comparison": {
                     "ranked_items": [
-                        {"id": "work-a", "rank": 1, "eligible": True, "reason": "Higher verified impact.",
+                        {"id": "mythologyprospector-hub/world#41", "rank": 1, "eligible": True, "reason": "Higher verified impact.",
                          "tradeoffs": "Requires follow-up.", "evidence_refs": ["e001"]},
-                        {"id": "work-b", "rank": 2, "eligible": True, "reason": "Useful but less urgent.",
+                        {"id": "mythologyprospector-hub/world#42", "rank": 2, "eligible": True, "reason": "Useful but less urgent.",
                          "tradeoffs": "Delays a smaller benefit.", "evidence_refs": ["e001"]},
                     ],
                     "unknowns": ["The mock evidence does not establish semantic truth."],
@@ -103,11 +104,23 @@ class ApiRunnerTests(unittest.TestCase):
                 },
             }
             responses = [
-                {"id": "resp-tool", "output": [{
+                {"id": "resp-list", "output": [{
                     "type": "function_call",
                     "name": "list_mapped_public_repositories",
                     "arguments": "{}",
                     "call_id": "call-list",
+                }]},
+                {"id": "resp-issue-41", "output": [{
+                    "type": "function_call",
+                    "name": "get_public_issue_or_pull_request",
+                    "arguments": json.dumps({"repository": "mythologyprospector-hub/world", "number": 41}),
+                    "call_id": "call-issue-41",
+                }]},
+                {"id": "resp-issue-42", "output": [{
+                    "type": "function_call",
+                    "name": "get_public_issue_or_pull_request",
+                    "arguments": json.dumps({"repository": "mythologyprospector-hub/world", "number": 42}),
+                    "call_id": "call-issue-42",
                 }]},
                 {"id": "resp-final", "output": [{
                     "type": "message",
@@ -120,20 +133,62 @@ class ApiRunnerTests(unittest.TestCase):
                 sent_payloads.append(payload)
                 return responses.pop(0)
 
-            result = run_evaluation(
-                SHA, str(map_path), "test-key", "test-model", str(out_path),
-                post_json=fake_post,
-            )
+            def fake_gh_get(url):
+                number = int(url.rsplit("/", 1)[1])
+                return {
+                    "repository_url": "https://api.github.com/repos/mythologyprospector-hub/world",
+                    "number": number,
+                    "title": f"Example issue {number}",
+                    "state": "open",
+                    "html_url": f"https://github.com/mythologyprospector-hub/world/issues/{number}",
+                    "updated_at": "2026-10-16T00:00:00Z",
+                    "body": "Mock issue body",
+                }
+
+            from unittest.mock import patch
+            with patch("tools.behavioral_eval.api_runner.gh_get", side_effect=fake_gh_get):
+                result = run_evaluation(
+                    SHA, str(map_path), "test-key", "test-model", str(out_path),
+                    post_json=fake_post,
+                )
             saved = json.loads(out_path.read_text())
             self.assertEqual(result["status"], "public_only_trace_structure_pass")
             self.assertEqual(saved["status"], "public_only_trace_structure_pass")
             self.assertEqual(saved["report"]["inventory_scope"], "mapped_public_repositories_only")
             self.assertEqual(saved["tool_ledger"][0]["id"], "e001")
             self.assertEqual(saved["tool_ledger"][0]["read_only"], True)
-            self.assertEqual(result["report"]["runner_metadata"]["tool_call_count"], 1)
-            self.assertEqual(sent_payloads[1]["previous_response_id"], "resp-tool")
+            self.assertEqual(result["report"]["runner_metadata"]["tool_call_count"], 3)
+            self.assertEqual(sent_payloads[1]["previous_response_id"], "resp-list")
+            self.assertEqual(sent_payloads[2]["previous_response_id"], "resp-issue-41")
+            self.assertEqual(sent_payloads[3]["previous_response_id"], "resp-issue-42")
             self.assertEqual(result["validation_notes"][0].startswith("Validated scenario I"), True)
 
+
+    def test_ranked_items_must_cite_the_exact_fetched_issue_or_pr(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"]},
+        ]}}
+        ledger = [{
+            "id": "e001",
+            "tool": "get_public_issue_or_pull_request",
+            "repository": "mythologyprospector-hub/world",
+            "result": {"number": 42},
+        }]
+        with self.assertRaisesRegex(RunnerError, "exact item"):
+            validate_ranked_item_grounding(trace, ledger)
+
+    def test_repository_inventory_evidence_cannot_ground_ranked_work_item(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"]},
+        ]}}
+        ledger = [{
+            "id": "e001",
+            "tool": "list_mapped_public_repositories",
+            "repository": "mythologyprospector-hub/world",
+            "result": {"mapped_public_repositories": ["mythologyprospector-hub/world"]},
+        }]
+        with self.assertRaisesRegex(RunnerError, "exact item"):
+            validate_ranked_item_grounding(trace, ledger)
 
     def test_rejects_trace_that_omits_a_mapped_repository(self):
         trace = {"repositories": [
