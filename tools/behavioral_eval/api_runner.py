@@ -162,6 +162,22 @@ def run_tool(name: str, args: dict[str, Any], allowed: set[str], map_names: list
     raise RunnerError("Tool name is not allowlisted")
 
 
+def bounded_tool_payload(evidence_id: str, result: dict[str, Any]) -> str:
+    """Encode valid JSON even when the full evidence payload exceeds the model-input cap."""
+    payload = {"evidence_id": evidence_id, "result": result}
+    encoded = json.dumps(payload)
+    if len(encoded) <= MAX_TOOL_OUTPUT_CHARS:
+        return encoded
+    preview = json.dumps(result, ensure_ascii=False)
+    return json.dumps({
+        "evidence_id": evidence_id,
+        "truncated": True,
+        "original_result_chars": len(preview),
+        "preview": preview[: max(0, MAX_TOOL_OUTPUT_CHARS // 2)],
+        "note": "Result preview truncated for model input; full result is preserved in the runner artifact.",
+    })
+
+
 def output_text(response: dict[str, Any]) -> str:
     chunks = []
     for item in response.get("output", []):
@@ -261,11 +277,11 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
                     "result": json.loads(raw),
                 }
                 ledger.append(result)
-                tool_payload = json.dumps({"evidence_id": result_id, "result": json.loads(raw)})
+                tool_payload = bounded_tool_payload(result_id, result["result"])
                 outputs.append({
                     "type": "function_call_output",
                     "call_id": call["call_id"],
-                    "output": tool_payload[:MAX_TOOL_OUTPUT_CHARS],
+                    "output": tool_payload,
                 })
             request_input = outputs
         if not isinstance(trace, dict):
