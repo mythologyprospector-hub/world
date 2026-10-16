@@ -5,8 +5,8 @@ These tests check behavior, not merely whether an instruction exists. They apply
 ## Run protocol
 
 1. Start a genuinely fresh assistant session. Do not paste in a prior assistant's conclusions.
-2. Send **only the World repository URL**, with no explanatory text or checklist.
-3. Observe whether the assistant opens `HANDOFF.md`, performs the arrival protocol, and begins the actual work without making the owner prompt it again. Do not coach it through omitted steps during the first run.
+2. Send **only the candidate branch URL** when testing a candidate revision, with no explanatory text or checklist.
+3. **The conversation that receives that candidate URL is the test run.** The assistant must not ask the owner to open another fresh chat or send the same link again. It should open `HANDOFF.md`, perform the arrival protocol, and begin actual work without making the owner prompt it again. Do not coach it through omitted steps during the first run.
 4. Evaluate its behavior against each scenario below using current repository evidence. Record links, commit IDs, query results, or explicit access/tool limitations.
 5. Mark each scenario **PASS**, **FAIL**, or **UNVERIFIED**. A claim that the assistant intends to do something is not evidence it did it. A written rule, an edit, or an open PR is not a behavioral pass.
 6. Stop downstream implementation if any mandatory scenario fails or remains unverified. Read-only inventory and portfolio discovery should still proceed where possible, so the owner is not left without a landscape assessment. Repair the specific defect, then rerun affected scenarios.
