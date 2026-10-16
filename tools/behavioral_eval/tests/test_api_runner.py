@@ -50,6 +50,7 @@ class ApiRunnerTests(unittest.TestCase):
             saved = json.loads(out_path.read_text())
             self.assertEqual(saved["status"], "failed")
             self.assertEqual(saved["tool_ledger"], [])
+            self.assertEqual(saved["model_response_text"], "not json")
 
 
 if __name__ == "__main__":
