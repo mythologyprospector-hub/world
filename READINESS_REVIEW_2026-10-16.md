@@ -129,3 +129,34 @@ Observed issues:
 - Never use a disclaimer about the current session's independence as a stopping point.
 
 The third repair is committed on the candidate branch. The latest observed behavior remains a failure; this instruction change is not itself a behavioral pass. Automated checks must be checked for the new head, and a future behavior run must show actual work rather than another briefing.
+
+
+## Fourth candidate-branch observation: the test was named, then deferred again
+
+The owner supplied the response from another fresh ChatGPT conversation whose first and only message was the candidate branch URL. The response correctly identified the distinction between structural checks and behavioral proof, recognized the repeated restart/readiness-briefing failures, and correctly kept readiness uncertified. It also accurately identified PR #19 as the integrated candidate.
+
+**Result: FAIL — test administration displaced execution again.** Despite receiving the candidate URL as the launch message, the assistant concluded that the next milestone was a fresh-session test and described what that future session should do. This conversation was already the requested test. The response did not produce a current evidence-backed portfolio comparison, validate the current portfolio ranking against live repository evidence, or complete a useful action. It repeated the existing readiness report and deferred the required work.
+
+This fourth observation confirms the pattern is not solved by increasingly explicit wording alone. The candidate has repeatedly learned to explain the desired behavior while not reliably executing it. **Do not count another documentation-only repair as progress toward behavioral readiness.** The next engineering step should change how the arrival protocol is operationalized and evaluated, then use evidence from actual tool-backed work to determine whether behavior changes. No downstream implementation is authorized by this observation.
+
+## Portfolio evidence refreshed after the fourth observation
+
+A fresh query of the linked GitHub account returned nine accessible repositories: seven public projects already represented in the World map and two private repositories that remain intentionally unnamed in this public report. A current open-PR query returned 23 open pull requests across those nine repositories:
+
+- world: 4 open PRs, including integrated readiness proposal #19 and closing-note proposal #20.
+- project_seed: 4 open PRs, including the narrow read-only-survey sequencing proposal #16.
+- episteme: 6 open PRs, with substantive scientific verification and experiment-resolution work alongside a Seed-sync PR.
+- wonderweave: 4 open PRs, including the ChatGPT-first player experience #15 and player actions that change the world #11.
+- organs, renaissance, and praxis: 1 open PR each, all currently titled Project Seed synchronization.
+- The two private repositories: 1 open PR each. Their names, titles, and contents are intentionally not reproduced here.
+
+### Current provisional ranking
+
+1. **World readiness behavior** remains first because it governs whether the factory can reliably orient, compare, and act across the portfolio. The immediate blocker is now demonstrated execution, not a lack of written acceptance language.
+2. **Project Seed #16** remains the next shared-governance item, but it must be reviewed and verified on its current head before anyone treats it as ready.
+3. **Episteme's substantive scientific verification queue** remains the strongest downstream technical work cluster by visible open-PR count and purpose; implementation stays behind the World readiness gate.
+4. **Wonderweave's first-player experience and world-changing actions** remain promising but require their own project-level playtest after the factory gate permits downstream selection.
+5. **Seed-sync proposals in Organs, Renaissance, and Praxis** are lower urgency on current evidence because each repository's only visible open PR is a synchronization proposal, not a substantive project milestone. This is a prioritization judgment, not a recommendation to merge or close them.
+6. **Private repository work** cannot be ranked more specifically in this public document. The repositories remain included in the account inventory; their own governing records control lifecycle and action, and public disclosure remains out of scope.
+
+This refreshed snapshot is based on current repository-list and open-PR queries, not a deep audit of every PR's diff, workflow, issue, or recent implementation. Counts can change. No pull request was merged, no visibility changed, and no downstream implementation began.
