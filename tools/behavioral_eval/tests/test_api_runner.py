@@ -11,6 +11,7 @@ from tools.behavioral_eval.api_runner import (
     run_tool,
     validate_mapped_inventory,
     validate_ranked_item_grounding,
+    validate_source_checks,
 )
 
 SHA = "a" * 40
@@ -90,9 +91,9 @@ class ApiRunnerTests(unittest.TestCase):
                 "portfolio_comparison": {
                     "ranked_items": [
                         {"id": "mythologyprospector-hub/world#41", "rank": 1, "eligible": True, "reason": "Higher verified impact.",
-                         "tradeoffs": "Requires follow-up.", "evidence_refs": ["e002"]},
+                         "tradeoffs": "Requires follow-up.", "evidence_refs": ["e002"], "source_checks": [{"evidence_ref": "e002", "field": "state", "expected": "open"}]},
                         {"id": "mythologyprospector-hub/world#42", "rank": 2, "eligible": True, "reason": "Useful but less urgent.",
-                         "tradeoffs": "Delays a smaller benefit.", "evidence_refs": ["e003"]},
+                         "tradeoffs": "Delays a smaller benefit.", "evidence_refs": ["e003"], "source_checks": [{"evidence_ref": "e003", "field": "state", "expected": "open"}]},
                     ],
                     "unknowns": ["The mock evidence does not establish semantic truth."],
                 },
@@ -163,6 +164,41 @@ class ApiRunnerTests(unittest.TestCase):
             self.assertEqual(sent_payloads[3]["previous_response_id"], "resp-issue-42")
             self.assertEqual(result["validation_notes"][0].startswith("Validated scenario I"), True)
 
+
+    def test_false_declared_source_fact_fails_against_ledger(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"],
+             "source_checks": [{"evidence_ref": "e001", "field": "state", "expected": "closed"}]},
+        ]}}
+        ledger = [{"id": "e001", "tool": "get_public_issue_or_pull_request",
+                   "repository": "mythologyprospector-hub/world",
+                   "result": {"number": 41, "state": "open"}}]
+        with self.assertRaisesRegex(RunnerError, "source check failed"):
+            validate_source_checks(trace, ledger)
+
+    def test_unsupported_impact_claim_remains_human_review_required(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "reason": "Huge impact",
+             "evidence_refs": ["e001"],
+             "source_checks": [{"evidence_ref": "e001", "field": "state", "expected": "open"}]},
+        ]}}
+        ledger = [{"id": "e001", "tool": "get_public_issue_or_pull_request",
+                   "repository": "mythologyprospector-hub/world",
+                   "result": {"number": 41, "state": "open", "title": "Example"}}]
+        grades = validate_source_checks(trace, ledger)
+        self.assertEqual(grades["ranking_impact_and_dependency_judgments"], "human_review_required")
+
+    def test_valid_fact_check_does_not_upgrade_judgment_grade(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"],
+             "source_checks": [{"evidence_ref": "e001", "field": "state", "expected": "open"}]},
+        ]}}
+        ledger = [{"id": "e001", "tool": "get_public_issue_or_pull_request",
+                   "repository": "mythologyprospector-hub/world",
+                   "result": {"number": 41, "state": "open"}}]
+        grades = validate_source_checks(trace, ledger)
+        self.assertEqual(grades["declared_source_facts"], "verified")
+        self.assertEqual(grades["ranking_impact_and_dependency_judgments"], "human_review_required")
 
     def test_ranked_items_must_cite_the_exact_fetched_issue_or_pr(self):
         trace = {"portfolio_comparison": {"ranked_items": [
