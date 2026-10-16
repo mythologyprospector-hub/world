@@ -90,9 +90,9 @@ class ApiRunnerTests(unittest.TestCase):
                 "portfolio_comparison": {
                     "ranked_items": [
                         {"id": "mythologyprospector-hub/world#41", "rank": 1, "eligible": True, "reason": "Higher verified impact.",
-                         "tradeoffs": "Requires follow-up.", "evidence_refs": ["e001"]},
+                         "tradeoffs": "Requires follow-up.", "evidence_refs": ["e002"]},
                         {"id": "mythologyprospector-hub/world#42", "rank": 2, "eligible": True, "reason": "Useful but less urgent.",
-                         "tradeoffs": "Delays a smaller benefit.", "evidence_refs": ["e001"]},
+                         "tradeoffs": "Delays a smaller benefit.", "evidence_refs": ["e003"]},
                     ],
                     "unknowns": ["The mock evidence does not establish semantic truth."],
                 },
