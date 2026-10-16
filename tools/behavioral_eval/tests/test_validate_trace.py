@@ -53,6 +53,12 @@ class ValidateTraceTests(unittest.TestCase):
         with self.assertRaisesRegex(TraceError, "full 40-character"):
             validate_trace(trace)
 
+    def test_rejects_duplicate_tool_result_ids(self):
+        trace = copy.deepcopy(self.valid_trace)
+        trace["tool_results"].append(copy.deepcopy(trace["tool_results"][0]))
+        with self.assertRaisesRegex(TraceError, "duplicate tool result id"):
+            validate_trace(trace)
+
 
 if __name__ == "__main__":
     unittest.main()
