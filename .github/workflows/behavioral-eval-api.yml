@@ -1,0 +1,55 @@
+name: Opt-in World API Behavioral Evaluation
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: Full commit SHA to evaluate
+        required: true
+        type: string
+      confirmation:
+        description: Type RUN_PUBLIC_ONLY_EVAL to confirm a billable API run
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate-public-portfolio:
+    if: ${{ inputs.confirmation == 'RUN_PUBLIC_ONLY_EVAL' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out the pinned candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.candidate_sha }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Require explicit API configuration
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          WORLD_EVAL_MODEL: ${{ vars.WORLD_EVAL_MODEL }}
+        run: |
+          test -n "$OPENAI_API_KEY" || { echo "::error::Configure OPENAI_API_KEY as a repository Actions secret before running the API evaluation."; exit 1; }
+          test -n "$WORLD_EVAL_MODEL" || { echo "::error::Configure WORLD_EVAL_MODEL as a repository Actions variable with an API-enabled model."; exit 1; }
+          echo "API configuration exists; credential value will not be printed."
+      - name: Run bounded public-only evaluation
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          WORLD_EVAL_MODEL: ${{ vars.WORLD_EVAL_MODEL }}
+        run: >-
+          python tools/behavioral_eval/api_runner.py
+          --candidate-sha "${{ inputs.candidate_sha }}"
+          --output artifacts/scenario-i-api-run.json
+      - name: Upload evaluation evidence, including failed-run ledger
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scenario-i-api-run
+          path: artifacts/scenario-i-api-run.json
+          if-no-files-found: warn
+          retention-days: 14
