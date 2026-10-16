@@ -99,8 +99,9 @@ def gh_get(url: str) -> Any:
     return fetch_json(url)
 
 
-def require_public_repository(repository: str, base: str, get_json=gh_get) -> dict[str, Any]:
+def require_public_repository(repository: str, base: str, get_json=None) -> dict[str, Any]:
     """Fail closed unless GitHub currently confirms this exact repository is public."""
+    get_json = get_json or gh_get
     repo = get_json(base)
     if not isinstance(repo, dict):
         raise RunnerError("Repository metadata was not an object; request refused")
