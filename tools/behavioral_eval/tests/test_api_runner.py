@@ -177,6 +177,28 @@ class ApiRunnerTests(unittest.TestCase):
         with self.assertRaisesRegex(RunnerError, "exact item"):
             validate_ranked_item_grounding(trace, ledger)
 
+    def test_ranked_items_must_be_open_and_unmerged(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"]},
+        ]}}
+        closed_ledger = [{
+            "id": "e001",
+            "tool": "get_public_issue_or_pull_request",
+            "repository": "mythologyprospector-hub/world",
+            "result": {"number": 41, "state": "closed", "is_pull_request": False},
+        }]
+        with self.assertRaisesRegex(RunnerError, "exact item"):
+            validate_ranked_item_grounding(trace, closed_ledger)
+
+        merged_ledger = [{
+            "id": "e001",
+            "tool": "get_public_issue_or_pull_request",
+            "repository": "mythologyprospector-hub/world",
+            "result": {"number": 41, "state": "open", "is_pull_request": True, "merged": True},
+        }]
+        with self.assertRaisesRegex(RunnerError, "exact item"):
+            validate_ranked_item_grounding(trace, merged_ledger)
+
     def test_repository_inventory_evidence_cannot_ground_ranked_work_item(self):
         trace = {"portfolio_comparison": {"ranked_items": [
             {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"]},
