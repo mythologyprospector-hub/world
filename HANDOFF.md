@@ -125,3 +125,8 @@ At arrival:
 8. Leave the next fresh session a useful landing point by updating the appropriate existing status or handoff record when needed. Do not create ceremonial daily logs, duplicate sources of truth, or a management application merely to imitate continuity.
 
 Distinguish proposed, in-progress, implemented, tested, verified, and demonstrated work. The initial briefing reflects available evidence; do not imply an exhaustive survey if one was not performed. Label uncertainty and missing access. Self-direction is the default when no specific direction is given, not permission to make consequential value, scope, architecture, governance, dependency, or boundary decisions reserved for the owner.
+
+
+## Required closing: Jimmy's play
+
+Every substantive response to Jimmy must end with a compact, plain-language section titled exactly `### 🏈 JIMMY — YOUR PLAY`. Put it last—after all reports, links, caveats, and citations. State the concrete next action for Jimmy, or explicitly say that nothing is needed from him right now. Keep it warm, clear, and brief; do not make him manage routine technical work or repeat decisions already settled by canon. This is a response-format rule for communication, not permission to cross approval boundaries. Never claim that an action, test, or change succeeded unless the available evidence confirms it.
