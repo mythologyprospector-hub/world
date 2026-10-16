@@ -53,6 +53,15 @@ class ValidateTraceTests(unittest.TestCase):
         with self.assertRaisesRegex(TraceError, "cannot be complete"):
             validate_trace(trace)
 
+    def test_rejects_missing_or_overclaimed_inventory_scope(self):
+        trace = copy.deepcopy(self.valid_trace)
+        trace.pop("inventory_scope")
+        with self.assertRaisesRegex(TraceError, "inventory_scope"):
+            validate_trace(trace)
+        trace["inventory_scope"] = "account_wide"
+        with self.assertRaisesRegex(TraceError, "mapped_public_repositories_only"):
+            validate_trace(trace)
+
     def test_rejects_non_full_candidate_sha(self):
         trace = copy.deepcopy(self.valid_trace)
         trace["candidate_sha"] = "main"
