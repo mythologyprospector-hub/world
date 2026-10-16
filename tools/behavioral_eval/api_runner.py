@@ -216,7 +216,7 @@ def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, 
         "complete one useful read-only action. Do not claim account-wide or private-repository coverage: "
         "this runner can inspect only public repositories in REPOSITORIES.md. State that this is an "
         "important unverified limitation. Return ONLY a JSON object matching the trace validator: "
-        "schema_version=1, scenario_id='I', candidate_sha, tool_results (use each evidence id returned "
+        "schema_version=1, scenario_id='I', candidate_sha, inventory_scope='mapped_public_repositories_only', tool_results (use each evidence id returned "
         "by tools), repositories (each entry name, map_status, lifecycle, evidence_refs), map_reconciliation "
         "(complete, unmapped_repositories, mapped_repositories_missing_from_inventory, notes), "
         "portfolio_comparison (ranked_items with id, rank, eligible, reason, tradeoffs, evidence_refs; "
