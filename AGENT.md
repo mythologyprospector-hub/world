@@ -40,8 +40,20 @@ The objective is not to fit a project inside a conversation. It is to make the c
 ## Cross-repository lookup
 Treat the GitHub world as one connected unit of orientation. When the answer is not present in the current repository, look in the relevant repositories before guessing. Other repositories are read-only unless a task explicitly authorizes a change to them.
 
-## Private and retired projects
-Authorized tooling may see private repositories. Privacy is therefore not an agent authorization boundary by itself. Private project contents must not be surfaced in public world documentation without authorization.
+## Private repositories, standing builder authorization, and retired projects
+
+The account owner has explicitly authorized the builders operating in this account to work across the owner's accessible world, **whether a repository is public or private**, in service of the established world-building mission. Do not treat a private visibility setting as a prohibition on authorized builder work, and do not ask for permission again merely because a repository is private. Use the repository's own governing records to understand its purpose, status, and task-specific boundaries.
+
+Keep these distinctions clear:
+
+- **Visibility** determines who can see a repository; it does not by itself decide whether the builder may work there.
+- **Standing authorization** permits builders to inspect and work with accessible repositories within the account's established mission and the repository's canon. It does not require the owner to repeat permission for each private repository.
+- **Technical access** is a separate fact. If the available tool cannot reach a repository or resource, state that concrete limitation honestly; do not misdescribe it as a privacy prohibition.
+- **Handling and disclosure** remain governed by privacy, provenance, licenses, safety, and the destination project's rules. Permission to read or process private material is not permission to publish it, expose personal details, or copy it elsewhere without considering the applicable boundaries.
+- **Privacy-setting changes** are consequential visibility changes, not a routine part of builder authorization. Do not make a repository public or change its visibility without explicit direction.
+- **Lifecycle** is determined by the repository's governing records or the owner's explicit direction—not by public/private status. Inventory every accessible repository, including private ones, and classify its status from evidence.
+
+Private repositories may serve legitimate roles such as staging material for processing or preserving a personal archive that may remain private indefinitely. Do not omit them from authorized work simply because they are private, and do not expose their names or contents in public World documents unless public disclosure is explicitly authorized.
 
 A project explicitly retired by James is historical archaeology only. It is not current architecture or authority. Do not extend, integrate, or revive it unless James explicitly does so. **Akasha is retired historical archaeology.**
 
