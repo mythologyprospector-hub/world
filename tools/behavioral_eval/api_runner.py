@@ -255,6 +255,51 @@ def validate_ranked_item_grounding(trace: dict[str, Any], ledger: list[dict[str,
             )
 
 
+
+SOURCE_CHECK_FIELDS = {"repository", "number", "title", "state", "url", "updated_at", "is_pull_request", "merged", "draft", "head_sha", "base"}
+
+
+def validate_source_checks(trace: dict[str, Any], ledger: list[dict[str, Any]]) -> dict[str, str]:
+    """Verify explicit source facts against fetched payloads; never grade prose judgments."""
+    by_id = {entry.get("id"): entry for entry in ledger if isinstance(entry, dict)}
+    comparison = trace.get("portfolio_comparison")
+    items = comparison.get("ranked_items") if isinstance(comparison, dict) else None
+    if not isinstance(items, list):
+        raise RunnerError("Portfolio comparison ranked_items must be a list")
+    for item in items:
+        if not isinstance(item, dict):
+            raise RunnerError("Each ranked work item must be an object")
+        item_id = item.get("id", "<unknown>")
+        refs = item.get("evidence_refs")
+        checks = item.get("source_checks")
+        if not isinstance(refs, list) or not isinstance(checks, list) or not checks:
+            raise RunnerError(f"Ranked item {item_id!r} needs non-empty source_checks alongside evidence_refs")
+        for check in checks:
+            if not isinstance(check, dict):
+                raise RunnerError(f"{item_id}: each source check must be an object")
+            ref = check.get("evidence_ref")
+            field = check.get("field")
+            if ref not in refs:
+                raise RunnerError(f"{item_id}: source check must cite one of the item's evidence_refs")
+            if field not in SOURCE_CHECK_FIELDS or "expected" not in check:
+                raise RunnerError(f"{item_id}: source check needs an allowed field and expected value")
+            entry = by_id.get(ref)
+            if not entry or entry.get("tool") != "get_public_issue_or_pull_request":
+                raise RunnerError(f"{item_id}: source check {ref!r} is not a fetched issue/PR result")
+            payload = entry.get("result")
+            if not isinstance(payload, dict):
+                raise RunnerError(f"{item_id}: source check {ref!r} has no source payload")
+            actual = entry.get("repository") if field == "repository" else payload.get(field)
+            expected = check["expected"]
+            if type(actual) is not type(expected) or actual != expected:
+                raise RunnerError(f"{item_id}: source check failed for {field!r} in {ref!r}; expected {expected!r}, source has {actual!r}")
+    return {
+        "identity_and_reference_validity": "verified",
+        "declared_source_facts": "verified",
+        "ranking_impact_and_dependency_judgments": "human_review_required",
+    }
+
+
 def run_evaluation(candidate_sha: str, map_path: str, api_key: str, model: str, output_path: str,
                    post_json=api_json, get_json=gh_get) -> dict[str, Any]:
     if not SHA_RE.fullmatch(candidate_sha):
