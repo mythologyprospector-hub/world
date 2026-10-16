@@ -47,6 +47,12 @@ class ValidateTraceTests(unittest.TestCase):
         with self.assertRaisesRegex(TraceError, "disclose exactly"):
             validate_trace(trace)
 
+    def test_rejects_complete_reconciliation_with_missing_mapped_repository(self):
+        trace = copy.deepcopy(self.valid_trace)
+        trace["map_reconciliation"]["mapped_repositories_missing_from_inventory"] = ["episteme"]
+        with self.assertRaisesRegex(TraceError, "cannot be complete"):
+            validate_trace(trace)
+
     def test_rejects_non_full_candidate_sha(self):
         trace = copy.deepcopy(self.valid_trace)
         trace["candidate_sha"] = "main"
