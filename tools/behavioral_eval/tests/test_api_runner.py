@@ -1,0 +1,374 @@
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+from tools.behavioral_eval.api_runner import (
+    RunnerError,
+    function_calls,
+    output_text,
+    run_evaluation,
+    run_tool,
+    validate_mapped_inventory,
+    validate_ranked_item_grounding,
+    validate_source_checks,
+)
+
+SHA = "a" * 40
+MAP = "# Public map\n| Repository | Description |\n| **world** | coordination |\n| **episteme** | science |\n"
+
+
+class ApiRunnerTests(unittest.TestCase):
+    def test_missing_api_key_fails_before_network(self):
+        with tempfile.TemporaryDirectory() as d:
+            map_path = Path(d) / "REPOSITORIES.md"
+            map_path.write_text(MAP)
+            with self.assertRaisesRegex(RunnerError, "OPENAI_API_KEY"):
+                run_evaluation(SHA, str(map_path), "", "model", str(Path(d) / "out.json"),
+                               post_json=lambda *a, **k: self.fail("network should not run"))
+
+    def test_rejects_unmapped_repository(self):
+        with self.assertRaisesRegex(RunnerError, "allowlist"):
+            run_tool("get_public_repository_overview", {"repository": "someone/private"},
+                     {"mythologyprospector-hub/world"}, ["mythologyprospector-hub/world"])
+
+    def test_only_expected_function_calls_are_detected(self):
+        response = {"output": [
+            {"type": "message", "content": [{"type": "output_text", "text": "done"}]},
+            {"type": "function_call", "name": "list_mapped_public_repositories", "call_id": "call1"},
+        ]}
+        self.assertEqual(len(function_calls(response)), 1)
+        self.assertEqual(output_text(response), "done")
+
+    def test_bounded_tool_payload_remains_valid_json_when_truncated(self):
+        from tools.behavioral_eval.api_runner import bounded_tool_payload, MAX_TOOL_OUTPUT_CHARS
+
+        payload = bounded_tool_payload("e001", {"body": "x" * (MAX_TOOL_OUTPUT_CHARS * 3)})
+        decoded = json.loads(payload)
+        self.assertEqual(decoded["evidence_id"], "e001")
+        self.assertTrue(decoded["truncated"])
+        self.assertLessEqual(len(payload), MAX_TOOL_OUTPUT_CHARS)
+        self.assertIn("full result is preserved", decoded["note"])
+
+    def test_successful_mock_run_writes_failure_safe_public_scope_trace(self):
+        with tempfile.TemporaryDirectory() as d:
+            map_path = Path(d) / "REPOSITORIES.md"
+            map_path.write_text(MAP)
+            out_path = Path(d) / "out.json"
+            with self.assertRaisesRegex(RunnerError, "valid JSON trace"):
+                run_evaluation(SHA, str(map_path), "test-key", "test-model", str(out_path),
+                               post_json=lambda *a, **k: {"id": "resp1", "output": [
+                                   {"type": "message", "content": [
+                                       {"type": "output_text", "text": "not json"}]}]})
+            saved = json.loads(out_path.read_text())
+            self.assertEqual(saved["status"], "failed")
+            self.assertEqual(saved["tool_ledger"], [])
+            self.assertEqual(saved["model_response_text"], "not json")
+
+
+    def test_successful_mock_tool_round_trip_validates_and_writes_trace(self):
+        with tempfile.TemporaryDirectory() as d:
+            map_path = Path(d) / "REPOSITORIES.md"
+            map_path.write_text("# Public map\n| Repository | Description |\n| **world** | coordination |\n")
+            out_path = Path(d) / "out.json"
+            trace = {
+                "schema_version": 1,
+                "scenario_id": "I",
+                "candidate_sha": SHA,
+                "inventory_scope": "mapped_public_repositories_only",
+                "repositories": [{
+                    "name": "mythologyprospector-hub/world",
+                    "map_status": "mapped",
+                    "lifecycle": "unresolved",
+                    "evidence_refs": ["e001"],
+                }],
+                "map_reconciliation": {
+                    "complete": True,
+                    "unmapped_repositories": [],
+                    "mapped_repositories_missing_from_inventory": [],
+                    "notes": "The single-entry fixture map reconciles to the single inventoried repository.",
+                },
+                "portfolio_comparison": {
+                    "ranked_items": [
+                        {"id": "mythologyprospector-hub/world#41", "rank": 1, "eligible": True, "reason": "Higher verified impact.",
+                         "tradeoffs": "Requires follow-up.", "evidence_refs": ["e002"], "source_checks": [{"evidence_ref": "e002", "field": "state", "expected": "open"}]},
+                        {"id": "mythologyprospector-hub/world#42", "rank": 2, "eligible": True, "reason": "Useful but less urgent.",
+                         "tradeoffs": "Delays a smaller benefit.", "evidence_refs": ["e003"], "source_checks": [{"evidence_ref": "e003", "field": "state", "expected": "open"}]},
+                    ],
+                    "unknowns": ["The mock evidence does not establish semantic truth."],
+                },
+                "completed_action": {
+                    "status": "completed",
+                    "kind": "read_only",
+                    "description": "Listed the mapped public repository.",
+                    "evidence_refs": ["e001"],
+                },
+            }
+            responses = [
+                {"id": "resp-list", "output": [{
+                    "type": "function_call",
+                    "name": "list_mapped_public_repositories",
+                    "arguments": "{}",
+                    "call_id": "call-list",
+                }]},
+                {"id": "resp-issue-41", "output": [{
+                    "type": "function_call",
+                    "name": "get_public_issue_or_pull_request",
+                    "arguments": json.dumps({"repository": "mythologyprospector-hub/world", "number": 41}),
+                    "call_id": "call-issue-41",
+                }]},
+                {"id": "resp-issue-42", "output": [{
+                    "type": "function_call",
+                    "name": "get_public_issue_or_pull_request",
+                    "arguments": json.dumps({"repository": "mythologyprospector-hub/world", "number": 42}),
+                    "call_id": "call-issue-42",
+                }]},
+                {"id": "resp-final", "output": [{
+                    "type": "message",
+                    "content": [{"type": "output_text", "text": json.dumps(trace)}],
+                }]},
+            ]
+            sent_payloads = []
+
+            def fake_post(url, key, payload):
+                sent_payloads.append(payload)
+                return responses.pop(0)
+
+            def fake_gh_get(url):
+                base = "https://api.github.com/repos/mythologyprospector-hub/world"
+                if url == base:
+                    return {"full_name": "mythologyprospector-hub/world", "private": False}
+                number = int(url.rsplit("/", 1)[1])
+                return {
+                    "repository_url": base,
+                    "number": number,
+                    "title": f"Example issue {number}",
+                    "state": "open",
+                    "html_url": f"https://github.com/mythologyprospector-hub/world/issues/{number}",
+                    "updated_at": "2026-10-16T00:00:00Z",
+                    "body": "Mock issue body",
+                }
+
+            from unittest.mock import patch
+            with patch("tools.behavioral_eval.api_runner.gh_get", side_effect=fake_gh_get):
+                result = run_evaluation(
+                    SHA, str(map_path), "test-key", "test-model", str(out_path),
+                    post_json=fake_post,
+                )
+            saved = json.loads(out_path.read_text())
+            self.assertEqual(result["status"], "public_only_trace_structure_pass")
+            self.assertEqual(saved["status"], "public_only_trace_structure_pass")
+            self.assertEqual(saved["report"]["inventory_scope"], "mapped_public_repositories_only")
+            self.assertEqual(saved["report"]["evidence_grades"]["identity_and_reference_validity"], "verified")
+            self.assertEqual(saved["report"]["evidence_grades"]["declared_source_facts"], "verified")
+            self.assertEqual(saved["report"]["evidence_grades"]["ranking_impact_and_dependency_judgments"], "human_review_required")
+            self.assertEqual(saved["tool_ledger"][0]["id"], "e001")
+            self.assertEqual(saved["tool_ledger"][0]["read_only"], True)
+            self.assertEqual(result["report"]["runner_metadata"]["tool_call_count"], 3)
+            self.assertEqual(sent_payloads[1]["previous_response_id"], "resp-list")
+            self.assertEqual(sent_payloads[2]["previous_response_id"], "resp-issue-41")
+            self.assertEqual(sent_payloads[3]["previous_response_id"], "resp-issue-42")
+            self.assertEqual(result["validation_notes"][0].startswith("Validated scenario I"), True)
+
+
+    def test_false_declared_source_fact_fails_against_ledger(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"],
+             "source_checks": [{"evidence_ref": "e001", "field": "state", "expected": "closed"}]},
+        ]}}
+        ledger = [{"id": "e001", "tool": "get_public_issue_or_pull_request",
+                   "repository": "mythologyprospector-hub/world",
+                   "result": {"number": 41, "state": "open"}}]
+        with self.assertRaisesRegex(RunnerError, "source check failed"):
+            validate_source_checks(trace, ledger)
+
+    def test_unsupported_impact_claim_remains_human_review_required(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "reason": "Huge impact",
+             "evidence_refs": ["e001"],
+             "source_checks": [{"evidence_ref": "e001", "field": "state", "expected": "open"}]},
+        ]}}
+        ledger = [{"id": "e001", "tool": "get_public_issue_or_pull_request",
+                   "repository": "mythologyprospector-hub/world",
+                   "result": {"number": 41, "state": "open", "title": "Example"}}]
+        grades = validate_source_checks(trace, ledger)
+        self.assertEqual(grades["ranking_impact_and_dependency_judgments"], "human_review_required")
+
+    def test_valid_fact_check_does_not_upgrade_judgment_grade(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"],
+             "source_checks": [{"evidence_ref": "e001", "field": "state", "expected": "open"}]},
+        ]}}
+        ledger = [{"id": "e001", "tool": "get_public_issue_or_pull_request",
+                   "repository": "mythologyprospector-hub/world",
+                   "result": {"number": 41, "state": "open"}}]
+        grades = validate_source_checks(trace, ledger)
+        self.assertEqual(grades["declared_source_facts"], "verified")
+        self.assertEqual(grades["ranking_impact_and_dependency_judgments"], "human_review_required")
+
+    def test_ranked_items_must_cite_the_exact_fetched_issue_or_pr(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"]},
+        ]}}
+        ledger = [{
+            "id": "e001",
+            "tool": "get_public_issue_or_pull_request",
+            "repository": "mythologyprospector-hub/world",
+            "result": {"number": 42},
+        }]
+        with self.assertRaisesRegex(RunnerError, "exact item"):
+            validate_ranked_item_grounding(trace, ledger)
+
+    def test_ranked_items_must_be_open_and_unmerged(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"]},
+        ]}}
+        closed_ledger = [{
+            "id": "e001",
+            "tool": "get_public_issue_or_pull_request",
+            "repository": "mythologyprospector-hub/world",
+            "result": {"number": 41, "state": "closed", "is_pull_request": False},
+        }]
+        with self.assertRaisesRegex(RunnerError, "exact item"):
+            validate_ranked_item_grounding(trace, closed_ledger)
+
+        merged_ledger = [{
+            "id": "e001",
+            "tool": "get_public_issue_or_pull_request",
+            "repository": "mythologyprospector-hub/world",
+            "result": {"number": 41, "state": "open", "is_pull_request": True, "merged": True},
+        }]
+        with self.assertRaisesRegex(RunnerError, "exact item"):
+            validate_ranked_item_grounding(trace, merged_ledger)
+
+    def test_repository_inventory_evidence_cannot_ground_ranked_work_item(self):
+        trace = {"portfolio_comparison": {"ranked_items": [
+            {"id": "mythologyprospector-hub/world#41", "evidence_refs": ["e001"]},
+        ]}}
+        ledger = [{
+            "id": "e001",
+            "tool": "list_mapped_public_repositories",
+            "repository": "mythologyprospector-hub/world",
+            "result": {"mapped_public_repositories": ["mythologyprospector-hub/world"]},
+        }]
+        with self.assertRaisesRegex(RunnerError, "exact item"):
+            validate_ranked_item_grounding(trace, ledger)
+
+    def test_rejects_trace_that_omits_a_mapped_repository(self):
+        trace = {"repositories": [
+            {"name": "mythologyprospector-hub/world", "map_status": "mapped"}
+        ]}
+        with self.assertRaisesRegex(RunnerError, "missing mapped repositories: mythologyprospector-hub/episteme"):
+            validate_mapped_inventory(
+                trace,
+                ["mythologyprospector-hub/world", "mythologyprospector-hub/episteme"],
+            )
+
+    def test_rejects_repository_outside_map_and_unmapped_classification(self):
+        with self.assertRaisesRegex(RunnerError, "repositories outside map"):
+            validate_mapped_inventory(
+                {"repositories": [
+                    {"name": "mythologyprospector-hub/world", "map_status": "mapped"},
+                    {"name": "other/project", "map_status": "mapped"},
+                ]},
+                ["mythologyprospector-hub/world"],
+            )
+        with self.assertRaisesRegex(RunnerError, "cannot classify entries as unmapped"):
+            validate_mapped_inventory(
+                {"repositories": [
+                    {"name": "mythologyprospector-hub/world", "map_status": "unmapped"}
+                ]},
+                ["mythologyprospector-hub/world"],
+            )
+
+
+    def test_runner_rejects_incomplete_inventory_and_saves_failure_artifact(self):
+        with tempfile.TemporaryDirectory() as d:
+            map_path = Path(d) / "REPOSITORIES.md"
+            map_path.write_text(MAP)
+            out_path = Path(d) / "out.json"
+            incomplete_trace = {
+                "repositories": [{
+                    "name": "mythologyprospector-hub/world",
+                    "map_status": "mapped",
+                }],
+            }
+            responses = [
+                {"id": "resp-tool", "output": [{
+                    "type": "function_call",
+                    "name": "list_mapped_public_repositories",
+                    "arguments": "{}",
+                    "call_id": "call-list",
+                }]},
+                {"id": "resp-final", "output": [{
+                    "type": "message",
+                    "content": [{"type": "output_text", "text": json.dumps(incomplete_trace)}],
+                }]},
+            ]
+
+            def fake_post(url, key, payload):
+                return responses.pop(0)
+
+            with self.assertRaisesRegex(
+                RunnerError,
+                "missing mapped repositories: mythologyprospector-hub/episteme",
+            ):
+                run_evaluation(
+                    SHA, str(map_path), "test-key", "test-model", str(out_path),
+                    post_json=fake_post,
+                )
+
+            saved = json.loads(out_path.read_text())
+            self.assertEqual(saved["status"], "failed")
+            self.assertIn("missing mapped repositories", saved["error"])
+            self.assertEqual(saved["tool_ledger"][0]["tool"], "list_mapped_public_repositories")
+
+
+
+    def test_issue_lookup_refuses_private_repository_before_fetching_issue(self):
+        from unittest.mock import patch
+
+        repository = "mythologyprospector-hub/world"
+        base = "https://api.github.com/repos/mythologyprospector-hub/world"
+        calls = []
+
+        def fake_get(url):
+            calls.append(url)
+            return {"full_name": repository, "private": True}
+
+        with patch("tools.behavioral_eval.api_runner.gh_get", side_effect=fake_get):
+            with self.assertRaisesRegex(RunnerError, "not confirmed public"):
+                run_tool(
+                    "get_public_issue_or_pull_request",
+                    {"repository": repository, "number": 41},
+                    {repository},
+                    [repository],
+                )
+
+        self.assertEqual(calls, [base])
+
+    def test_issue_lookup_refuses_unexpected_repository_identity(self):
+        from unittest.mock import patch
+
+        repository = "mythologyprospector-hub/world"
+        base = "https://api.github.com/repos/mythologyprospector-hub/world"
+        calls = []
+
+        def fake_get(url):
+            calls.append(url)
+            return {"full_name": "someone-else/world", "private": False}
+
+        with patch("tools.behavioral_eval.api_runner.gh_get", side_effect=fake_get):
+            with self.assertRaisesRegex(RunnerError, "not confirmed public"):
+                run_tool(
+                    "get_public_issue_or_pull_request",
+                    {"repository": repository, "number": 41},
+                    {repository},
+                    [repository],
+                )
+
+        self.assertEqual(calls, [base])
+
+
+if __name__ == "__main__":
+    unittest.main()

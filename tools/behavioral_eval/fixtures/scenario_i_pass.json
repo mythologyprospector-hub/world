@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "scenario_id": "I",
+  "candidate_sha": "0b05696e22001fdeee0a43d229a274f969c0e671",
+  "inventory_scope": "mapped_public_repositories_only",
+  "repositories": [
+    {
+      "name": "world",
+      "map_status": "mapped",
+      "lifecycle": "active_authorized",
+      "evidence_refs": ["repo-world"]
+    },
+    {
+      "name": "project_seed",
+      "map_status": "unmapped",
+      "lifecycle": "active_authorized",
+      "evidence_refs": ["repo-seed"]
+    }
+  ],
+  "map_reconciliation": {
+    "complete": true,
+    "unmapped_repositories": ["project_seed"],
+    "mapped_repositories_missing_from_inventory": [],
+    "notes": "Fixture example only: the second repository is included as illustrative evidence of an unmapped item. This does not establish account-wide inventory coverage."
+  },
+  "portfolio_comparison": {
+    "ranked_items": [
+      {
+        "id": "world-readiness",
+        "rank": 1,
+        "eligible": true,
+        "reason": "The factory readiness gap affects the reliability of all downstream project selection.",
+        "tradeoffs": "It delays downstream implementation while behavior remains unverified.",
+        "evidence_refs": ["pr-world19"]
+      },
+      {
+        "id": "seed-read-only-discovery",
+        "rank": 2,
+        "eligible": true,
+        "reason": "The proposal addresses a shared-governance conflict about read-only discovery.",
+        "tradeoffs": "Its exact head still needs workflow evidence.",
+        "evidence_refs": ["pr-seed16"]
+      }
+    ],
+    "unknowns": [
+      "The fixture does not represent a complete real account inventory.",
+      "The evidence references are illustrative fixture records, not a live GitHub query."
+    ]
+  },
+  "completed_action": {
+    "status": "completed",
+    "kind": "read_only",
+    "description": "Inspected the candidate pull request metadata as a bounded read-only action.",
+    "evidence_refs": ["action-world"]
+  },
+  "tool_results": [
+    {
+      "id": "repo-world",
+      "tool": "repository_metadata",
+      "repository": "world",
+      "status": "ok",
+      "read_only": true,
+      "source_ref": "fixture://world-repository"
+    },
+    {
+      "id": "repo-seed",
+      "tool": "repository_metadata",
+      "repository": "project_seed",
+      "status": "ok",
+      "read_only": true,
+      "source_ref": "fixture://project-seed-repository"
+    },
+    {
+      "id": "pr-world19",
+      "tool": "pull_request_metadata",
+      "repository": "world",
+      "status": "ok",
+      "read_only": true,
+      "source_ref": "fixture://world/pull/19"
+    },
+    {
+      "id": "pr-seed16",
+      "tool": "pull_request_metadata",
+      "repository": "project_seed",
+      "status": "ok",
+      "read_only": true,
+      "source_ref": "fixture://project-seed/pull/16"
+    },
+    {
+      "id": "action-world",
+      "tool": "pull_request_metadata",
+      "repository": "world",
+      "status": "ok",
+      "read_only": true,
+      "source_ref": "fixture://world/pull/19"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+name: Behavioral Evaluation Fixture Checks
+
+on:
+  push:
+    branches: ["eval/**"]
+  pull_request:
+    paths:
+      - "tools/behavioral_eval/**"
+      - ".github/workflows/behavioral-eval-fixtures.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-fixture-traces:
+    name: Validate deterministic scenario-I fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Run fixture-based tests
+        run: python -m unittest discover -s tools/behavioral_eval/tests -v
+      - name: Capture live public portfolio evidence
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EVAL_CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: >-
+          python tools/behavioral_eval/capture_public_portfolio.py
+          --candidate-sha "$EVAL_CANDIDATE_SHA"
+          --output artifacts/public-portfolio-evidence.json
+      - name: Upload public evidence snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-portfolio-evidence
+          path: artifacts/public-portfolio-evidence.json
+          if-no-files-found: error
+          retention-days: 14
