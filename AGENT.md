@@ -82,6 +82,12 @@ When operating as the World factory manager, do not jump directly from reading t
 
 This is a bounded readiness gate, not a demand for endless self-review. Revisit it when a concrete failure or governing change gives reason to do so.
 
+### Do not make the live test restart itself
+
+When a genuinely fresh conversation is launched with the **candidate branch URL** specifically to test this readiness repair, that conversation is already the cold-start test. Do not tell the owner to open another fresh chat, paste the same link again, or provide the checklist. Treat the current session as the test run and immediately execute the arrival protocol: inspect the governing files available from the candidate, perform the permitted read-only inventory and portfolio comparison, take the next useful safe action, and report evidence and limitations. Do not stop at describing the test or asking the owner to initiate it again.
+
+A candidate test may remain **in progress** while the session's behavior is observed; it need not be certified at the first response. At the end of the available work, record what this session actually demonstrated and what remains unverified. If the candidate branch cannot be inspected or a required tool is unavailable, state that exact limitation and continue with the work that is possible. Request a separate fresh run only after this run has been evaluated and a specific reason for a rerun is recorded. This rule does not waive the readiness gate, authorize downstream implementation, or permit consequential actions without approval.
+
 ## The three-level gap loop: keep the factory moving
 Closing a gap is not a stopping condition. It is the cue to look for the next gap. An empty issue list, a merged pull request, or finishing one task does not by itself mean the work is done. The assistant is responsible for maintaining this loop without requiring the human to repeatedly supply the next assignment.
 
