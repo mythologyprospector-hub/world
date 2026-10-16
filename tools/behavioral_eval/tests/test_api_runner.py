@@ -9,6 +9,7 @@ from tools.behavioral_eval.api_runner import (
     output_text,
     run_evaluation,
     run_tool,
+    validate_mapped_inventory,
 )
 
 SHA = "a" * 40
@@ -132,6 +133,34 @@ class ApiRunnerTests(unittest.TestCase):
             self.assertEqual(result["report"]["runner_metadata"]["tool_call_count"], 1)
             self.assertEqual(sent_payloads[1]["previous_response_id"], "resp-tool")
             self.assertEqual(result["validation_notes"][0].startswith("Validated scenario I"), True)
+
+
+    def test_rejects_trace_that_omits_a_mapped_repository(self):
+        trace = {"repositories": [
+            {"name": "mythologyprospector-hub/world", "map_status": "mapped"}
+        ]}
+        with self.assertRaisesRegex(RunnerError, "missing mapped repositories: mythologyprospector-hub/episteme"):
+            validate_mapped_inventory(
+                trace,
+                ["mythologyprospector-hub/world", "mythologyprospector-hub/episteme"],
+            )
+
+    def test_rejects_repository_outside_map_and_unmapped_classification(self):
+        with self.assertRaisesRegex(RunnerError, "repositories outside map"):
+            validate_mapped_inventory(
+                {"repositories": [
+                    {"name": "mythologyprospector-hub/world", "map_status": "mapped"},
+                    {"name": "other/project", "map_status": "mapped"},
+                ]},
+                ["mythologyprospector-hub/world"],
+            )
+        with self.assertRaisesRegex(RunnerError, "cannot classify entries as unmapped"):
+            validate_mapped_inventory(
+                {"repositories": [
+                    {"name": "mythologyprospector-hub/world", "map_status": "unmapped"}
+                ]},
+                ["mythologyprospector-hub/world"],
+            )
 
 
 if __name__ == "__main__":
