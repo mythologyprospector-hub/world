@@ -99,6 +99,21 @@ def gh_get(url: str) -> Any:
     return fetch_json(url)
 
 
+def require_public_repository(repository: str, base: str, get_json=gh_get) -> dict[str, Any]:
+    """Fail closed unless GitHub currently confirms this exact repository is public."""
+    repo = get_json(base)
+    if not isinstance(repo, dict):
+        raise RunnerError("Repository metadata was not an object; request refused")
+    full_name = repo.get("full_name")
+    if (
+        repo.get("private") is not False
+        or not isinstance(full_name, str)
+        or full_name.lower() != repository.lower()
+    ):
+        raise RunnerError("Repository was not confirmed public; request refused")
+    return repo
+
+
 def run_tool(name: str, args: dict[str, Any], allowed: set[str], map_names: list[str]) -> tuple[str, str]:
     if name == "list_mapped_public_repositories":
         return f"{OWNER}/world", json.dumps({
@@ -111,9 +126,7 @@ def run_tool(name: str, args: dict[str, Any], allowed: set[str], map_names: list
     path = repository.split("/", 1)[1]
     base = f"{API_ROOT}/repos/{OWNER}/{path}"
     if name == "get_public_repository_overview":
-        repo = gh_get(base)
-        if repo.get("private") is not False or repo.get("full_name", "").lower() != repository.lower():
-            raise RunnerError("Repository was not confirmed public; request refused")
+        repo = require_public_repository(repository, base)
         pulls = fetch_open_pull_requests(repository, gh_get)
         result = {
             "repository": repository,
@@ -133,6 +146,8 @@ def run_tool(name: str, args: dict[str, Any], allowed: set[str], map_names: list
         }
         return repository, json.dumps(result)
     if name == "get_public_issue_or_pull_request":
+        # Re-check visibility at point of use; a mapped repository may have changed.
+        require_public_repository(repository, base)
         number = args.get("number")
         if not isinstance(number, int) or isinstance(number, bool) or number < 1:
             raise RunnerError("number must be a positive integer")
