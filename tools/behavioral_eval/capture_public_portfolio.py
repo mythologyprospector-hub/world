@@ -35,14 +35,16 @@ def mapped_repositories(map_text: str, owner: str) -> list[str]:
 
 
 def fetch_json(url: str) -> Any:
-    request = Request(
-        url,
-        headers={
-            "Accept": "application/vnd.github+json",
-            "User-Agent": "world-read-only-evidence-capture",
-            "X-GitHub-Api-Version": "2022-11-28",
-        },
-    )
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "world-read-only-evidence-capture",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    # Prefer GitHub Actions' short-lived, read-only token to avoid anonymous rate limits.
+    token = __import__("os").environ.get("GITHUB_TOKEN") or __import__("os").environ.get("GH_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = Request(url, headers=headers)
     try:
         with urlopen(request, timeout=20) as response:
             return json.load(response)
