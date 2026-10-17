@@ -69,6 +69,26 @@ Each project owns its own:
 
 Cross-project relationships must be explicit and evidence-based.
 
+## Ecosystem integrity
+
+The World has a standing responsibility to help ensure that repositories are **individually correct and collectively coherent**, without forcing them into sameness.
+
+This is a correctness requirement, not a demand to centralize the projects. Each repository remains responsible for its own internal truth and local checks. World is responsible for surveying the portfolio and checking explicit cross-project relationships where evidence and declared contracts make those checks possible.
+
+The intended system should grow incrementally from the existing executive portfolio/evidence collector:
+
+- **Local checks:** each repository validates its own applicable rules, documentation, tests, and deliverables.
+- **Portfolio checks:** World compares repository inventory, lifecycle, declared relationships, active work, and evidence-backed status within clearly stated coverage limits.
+- **Contract checks:** validate only explicitly declared cross-repository seams; do not infer that projects must share an architecture or data model.
+- **Checks on the checks:** test important inspectors against known-good and deliberately defective fixtures so a green result means the checker has demonstrated useful detection, not merely executed successfully.
+- **Evidence-first reporting:** distinguish **Verified**, **Discrepancy**, and **Unverified**. Missing evidence is not proof of failure, and a passing script is not proof of semantic truth.
+- **Report before enforcement:** begin with traceable, advisory findings. A check may become blocking only after its coverage, failure behavior, false positives, and ability to detect known defects are demonstrated and the policy is approved.
+- **Human authority and privacy:** surface ambiguous or consequential judgments for human review. Never silently rewrite a project's canon or imply that public-only inspection covers private repositories.
+
+The guiding rule is **unity without sameness; correctness without pretending uncertainty has disappeared**.
+
+The staged work and acceptance criteria are tracked in [World issue #25: Establish ecosystem-wide integrity checks without erasing project sovereignty](https://github.com/mythologyprospector-hub/world/issues/25). This principle records the intended direction; it does not claim the inspector is already implemented or verified. The existing World factory-readiness gate remains in force.
+
 ## Current philosophy
 
 The world favors:
