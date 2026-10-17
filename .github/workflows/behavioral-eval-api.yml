@@ -17,20 +17,21 @@ permissions:
 
 jobs:
   evaluate-public-portfolio:
-    if: ${{ inputs.confirmation == 'RUN_PUBLIC_ONLY_EVAL' }}
+    # workflow_dispatch can be started against a non-default branch. Refuse
+    # to expose the API secret unless the selected workflow ref is trusted main.
+    if: ${{ github.ref == 'refs/heads/main' && inputs.confirmation == 'RUN_PUBLIC_ONLY_EVAL' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      # This workflow is dispatched from the default branch. Keep executable
-      # evaluator code pinned to that trusted workflow revision, not the candidate.
+      # The workflow must be dispatched from main. Explicitly pin executable
+      # evaluator code to main rather than trusting the user-selected event SHA.
       - name: Check out trusted evaluator code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: refs/heads/main
           path: trusted-runner
           persist-credentials: false
-      # The candidate is data under evaluation. Never execute its scripts while
-      # OPENAI_API_KEY is present in the job environment.
+      # Candidate content is treated as data only, never executed as code.
       - name: Check out candidate for its repository map only
         uses: actions/checkout@v4
         with:
@@ -53,10 +54,11 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           WORLD_EVAL_MODEL: ${{ vars.WORLD_EVAL_MODEL }}
+          CANDIDATE_SHA: ${{ inputs.candidate_sha }}
         run: >-
           python trusted-runner/tools/behavioral_eval/api_runner.py
           --map candidate/REPOSITORIES.md
-          --candidate-sha "${{ inputs.candidate_sha }}"
+          --candidate-sha "$CANDIDATE_SHA"
           --output artifacts/scenario-i-api-run.json
       - name: Upload evaluation evidence, including failed-run ledger
         if: always()
