@@ -17,14 +17,27 @@ permissions:
 
 jobs:
   evaluate-public-portfolio:
-    if: ${{ inputs.confirmation == 'RUN_PUBLIC_ONLY_EVAL' }}
+    # workflow_dispatch can be started against a non-default branch. Refuse
+    # to expose the API secret unless the selected workflow ref is trusted main.
+    if: ${{ github.ref == 'refs/heads/main' && inputs.confirmation == 'RUN_PUBLIC_ONLY_EVAL' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Check out the pinned candidate
+      # The workflow must be dispatched from main. Explicitly pin executable
+      # evaluator code to main rather than trusting the user-selected event SHA.
+      - name: Check out trusted evaluator code
+        uses: actions/checkout@v4
+        with:
+          ref: refs/heads/main
+          path: trusted-runner
+          persist-credentials: false
+      # Candidate content is treated as data only, never executed as code.
+      - name: Check out candidate for its repository map only
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.candidate_sha }}
+          path: candidate
+          persist-credentials: false
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -37,13 +50,15 @@ jobs:
           test -n "$OPENAI_API_KEY" || { echo "::error::Configure OPENAI_API_KEY as a repository Actions secret before running the API evaluation."; exit 1; }
           test -n "$WORLD_EVAL_MODEL" || { echo "::error::Configure WORLD_EVAL_MODEL as a repository Actions variable with an API-enabled model."; exit 1; }
           echo "API configuration exists; credential value will not be printed."
-      - name: Run bounded public-only evaluation
+      - name: Run trusted evaluator against candidate metadata
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           WORLD_EVAL_MODEL: ${{ vars.WORLD_EVAL_MODEL }}
+          CANDIDATE_SHA: ${{ inputs.candidate_sha }}
         run: >-
-          python tools/behavioral_eval/api_runner.py
-          --candidate-sha "${{ inputs.candidate_sha }}"
+          python trusted-runner/tools/behavioral_eval/api_runner.py
+          --map candidate/REPOSITORIES.md
+          --candidate-sha "$CANDIDATE_SHA"
           --output artifacts/scenario-i-api-run.json
       - name: Upload evaluation evidence, including failed-run ledger
         if: always()
