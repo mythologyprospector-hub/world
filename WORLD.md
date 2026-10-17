@@ -69,6 +69,40 @@ Each project owns its own:
 
 Cross-project relationships must be explicit and evidence-based.
 
+## Ecosystem integrity and rolling audit
+
+The World has a standing responsibility to help ensure that repositories are **individually correct and collectively coherent**, without forcing them into sameness.
+
+This is not merely a one-time portfolio survey. The intended outcome is a **rolling ecosystem audit**: establish a broad, evidence-backed baseline across all authorized repositories, then continuously refresh that picture so inconsistencies and drift do not quietly accumulate.
+
+The audit is persistent in responsibility, bounded in each run, and honest about coverage. It must not claim that the entire ecosystem is healthy just because a single run passes or some repositories were inaccessible.
+
+### Audit layers
+
+- **Repository-local checks:** each repository validates its own applicable rules, documentation, tests, and deliverables.
+- **Change-triggered checks:** run fast, deterministic checks when relevant code, docs, workflows, repository maps, or declared contracts change.
+- **Portfolio reconciliation:** periodically revisit the full authorized portfolio to catch missed events, stale evidence, untracked changes, missing repositories, and cross-project drift.
+- **Targeted rechecks:** when a source revision, dependency, contract, or finding changes, re-evaluate the affected checks rather than blindly repeating every expensive test.
+- **Cross-repository contract checks:** validate only explicitly declared relationships; do not infer that projects must share an architecture or data model.
+- **Inspector qualification:** test important checks against known-good and deliberately defective fixtures, and periodically test the audit machinery itself.
+- **Finding lifecycle:** preserve traceable evidence and enough history to distinguish newly detected, persistent, resolved, regressed, and unverified findings.
+
+### Evidence and authority
+
+Every finding should state its scope and evidence source, with source revision and capture/check time where available. Use clear outcomes such as **Verified**, **Discrepancy**, and **Unverified**. Missing evidence is not proof of failure; a passing script is not proof of semantic truth.
+
+Begin with report-first, advisory findings. A check may become blocking only after its coverage, failure behavior, false positives, and ability to detect known defects are demonstrated and the policy is approved.
+
+Automate routine detection, not consequential judgment. Do not silently rewrite a project's canon or automatically merge, delete, or otherwise make consequential changes. Ambiguous or consequential findings go to the human gate.
+
+### Coverage, privacy, and cadence
+
+Public and private coverage must be distinguished explicitly. Never expose private repository names or contents in public World artifacts, and never imply that public-only inspection covers private repositories. Use a tiered cadence: fast checks on relevant changes, broader scheduled reconciliation, and deeper tests only when justified, authorized, and safe. Do not introduce billable model/API calls or query private sources beyond existing authorization without explicit approval.
+
+The audit should grow from the existing World executive portfolio/evidence collector, not duplicate it with a second inspector. First map and qualify the current collector, its fixtures, and the related readiness/security work. The broad baseline audit and the rolling cadence are one design: the baseline discovers existing drift; the rolling process prevents the picture from becoming stale.
+
+The staged work and acceptance criteria are tracked in [World issue #25: Establish ecosystem-wide integrity checks without erasing project sovereignty](https://github.com/mythologyprospector-hub/world/issues/25). This principle records the intended direction; it does not claim the inspector or rolling audit is already implemented or verified. The existing World factory-readiness gate remains in force.
+
 ## Current philosophy
 
 The world favors:
