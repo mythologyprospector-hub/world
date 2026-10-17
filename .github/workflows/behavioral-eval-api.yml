@@ -21,10 +21,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Check out the pinned candidate
+      # This workflow is dispatched from the default branch. Keep executable
+      # evaluator code pinned to that trusted workflow revision, not the candidate.
+      - name: Check out trusted evaluator code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: trusted-runner
+          persist-credentials: false
+      # The candidate is data under evaluation. Never execute its scripts while
+      # OPENAI_API_KEY is present in the job environment.
+      - name: Check out candidate for its repository map only
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.candidate_sha }}
+          path: candidate
+          persist-credentials: false
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -37,12 +49,13 @@ jobs:
           test -n "$OPENAI_API_KEY" || { echo "::error::Configure OPENAI_API_KEY as a repository Actions secret before running the API evaluation."; exit 1; }
           test -n "$WORLD_EVAL_MODEL" || { echo "::error::Configure WORLD_EVAL_MODEL as a repository Actions variable with an API-enabled model."; exit 1; }
           echo "API configuration exists; credential value will not be printed."
-      - name: Run bounded public-only evaluation
+      - name: Run trusted evaluator against candidate metadata
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           WORLD_EVAL_MODEL: ${{ vars.WORLD_EVAL_MODEL }}
         run: >-
-          python tools/behavioral_eval/api_runner.py
+          python trusted-runner/tools/behavioral_eval/api_runner.py
+          --map candidate/REPOSITORIES.md
           --candidate-sha "${{ inputs.candidate_sha }}"
           --output artifacts/scenario-i-api-run.json
       - name: Upload evaluation evidence, including failed-run ledger
