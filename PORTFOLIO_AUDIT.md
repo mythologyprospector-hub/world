@@ -79,9 +79,11 @@ The audit found private or historical repository identities disclosed in multipl
 
 This report deliberately does not repeat those identities. The running log records affected public surfaces and evidence in sanitized form. The findings concern disclosure of identities, paths, or historical project context; they do not establish that private file contents are publicly readable. Do not blindly remove operational references or rewrite historical records. Owner review must decide what should remain public and how to preserve necessary automation and provenance safely.
 
-### 8. Historical repository lifecycle is unresolved
+### 8. Historical repository lifecycle — owner clarification
 
-A repository referenced in prior project context is absent from the current accessible inventory; exact metadata lookup returned 404 and name search returned no result. This does not prove deletion. It may have been renamed, moved, deleted, or become inaccessible. Do not guess a replacement or restore it without evidence.
+The owner confirms that four historical projects have been completely removed from the account intentionally. Treat those projects as retired, not as unresolved repositories to recover, restore, or re-add to the active portfolio. Historical mentions may remain as provenance, but do not infer current activity, dependencies, or authorization to recreate them.
+
+This owner clarification resolves the earlier uncertainty for that historical set. It does not establish the lifecycle of every other absent or unresolved repository reference; those must be assessed separately rather than guessed.
 
 ## Evidence freshness and limits
 
