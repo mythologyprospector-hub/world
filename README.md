@@ -22,6 +22,10 @@ The governing references are:
 6. [MACHINE.md](MACHINE.md) — local development layout.
 7. [JIMMYDEV.md](JIMMYDEV.md) — the human purpose and standards behind the work.
 
+### Current portfolio snapshot
+
+Read [PORTFOLIO_AUDIT.md](PORTFOLIO_AUDIT.md) for the dated, evidence-bounded portfolio snapshot. It is not a readiness certificate; verify current revisions before acting. The running findings log is [World issue #25](https://github.com/mythologyprospector-hub/world/issues/25).
+
 Then enter the relevant project's own repository and read its canonical documents before changing anything.
 
 ## Governing idea
