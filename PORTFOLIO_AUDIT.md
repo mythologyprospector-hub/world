@@ -32,6 +32,8 @@ The World repository map is intentionally public-only. That is a scope choice, n
 | Organs | 76fe42259f43414afc6a825556180d70c24b8f73 | Runtime infrastructure. Canonical scope wording conflicts across Organs and Renaissance documents; live host/runtime state is unverified. | [#17](https://github.com/mythologyprospector-hub/organs/pull/17) |
 | Wonderweave | 73fcfbdd867f4f03c4e1072cfac871c00694567d | Proposed game canon and experimental first-mystery materials. No human playtest has been conducted; the owner’s current hold remains in force. | [#7](https://github.com/mythologyprospector-hub/wonderweave/pull/7), [#11](https://github.com/mythologyprospector-hub/wonderweave/pull/11), [#14](https://github.com/mythologyprospector-hub/wonderweave/pull/14), [#15](https://github.com/mythologyprospector-hub/wonderweave/pull/15) |
 
+
+The report's own draft PR, World #27, was opened after this portfolio inventory was captured and is intentionally not counted in the pre-existing PR list above.
 Open PRs are proposals, not canonical state. A passing documentation workflow does not prove behavioral readiness. The listed public repositories had no repository-level rulesets returned by the inspected API, and each main branch reported unprotected; organization-level ruleset enforcement could not be inspected, so effective higher-level enforcement remains unverified.
 
 ## Confirmed discrepancies
